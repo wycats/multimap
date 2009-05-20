@@ -1,14 +1,6 @@
 require 'lib/multimap'
 
-describe MultiMap, "with inital values" do
-  before do
-    @map = MultiMap["a" => 100, "b" => 200]
-  end
-
-  it "should be equal to another MultiMap if they contain the same keys and values" do
-    @map.should == MultiMap["a" => 100, "b" => 200]
-  end
-
+shared_examples_for "Default", MultiMap do
   it "should fetch values at key" do
     @map["a"].should == [100]
     @map["b"].should == [200]
@@ -26,7 +18,7 @@ describe MultiMap, "with inital values" do
   end
 
   it "should return an empty array if not key does not exist" do
-    @map["c"].should == []
+    @map["z"].should == []
   end
 
   it "should clear all key/values" do
@@ -36,6 +28,18 @@ describe MultiMap, "with inital values" do
 
   it "should have an empty hash for the default value" do
     @map.default.should == []
+  end
+
+  it "should replace the contents of the map" do
+    @map.replace({ "c" => 300, "d" => 400 })
+    @map["a"].should == []
+    @map["c"].should == [300]
+  end
+end
+
+shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
+  it "should be equal to another MultiMap if they contain the same keys and values" do
+    @map.should == MultiMap["a" => 100, "b" => 200]
   end
 
   it "should delete all values at key" do
@@ -80,12 +84,6 @@ describe MultiMap, "with inital values" do
     @map.index(999).should be_nil
   end
 
-  it "should replace the contents of the map" do
-    @map.replace({ "c" => 300, "d" => 400 })
-    @map["a"].should == []
-    @map["c"].should == [300]
-  end
-
   it "should return an inverted hash" do
     @map.invert.should == { 100 => "a", 200 => "b" }
   end
@@ -116,6 +114,15 @@ describe MultiMap, "with inital values" do
 
   it "should return return values at keys" do
     @map.values_at("a", "b").should == [[100], [200]]
+  end
+end
+
+describe MultiMap, "with inital values" do
+  it_should_behave_like "Default MultiMap"
+  it_should_behave_like "MultiMap with inital values {'a' => 100, 'b' => 200}"
+
+  before do
+    @map = MultiMap["a" => 100, "b" => 200]
   end
 end
 

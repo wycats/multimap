@@ -12,8 +12,8 @@ class MultiMap < Hash
     map
   end
 
-  def initialize
-    super([])
+  def initialize(collection_klass = Array)
+    super(collection_klass.new.freeze)
   end
 
   def store(key, value)

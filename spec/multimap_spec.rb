@@ -23,7 +23,7 @@ describe MultiMap, "with inital values" do
   end
 
   it "should be equal to another MultiMap if they contain the same keys and values" do
-    (@map == MultiMap["a" => 100, "b" => 200]).should be_true
+    @map.should == MultiMap["a" => 100, "b" => 200]
   end
 
   it "should fetch values at key" do
@@ -42,5 +42,24 @@ describe MultiMap, "with inital values" do
 
   it "should have an empty hash for the default value" do
     @map.default.should eql([])
+  end
+end
+
+require 'set'
+
+describe MultiMap, "with a Set collection" do
+  before do
+    @map = MultiMap.new(Set)
+    @map["a"] = 100
+    @map["b"] = 200
+  end
+
+  it "should return an empty set if not key does not exist" do
+    @map["c"].should == [].to_set
+  end
+
+  it "should return values as a Set" do
+    @map["a"].should == [100].to_set
+    @map["b"].should == [200].to_set
   end
 end

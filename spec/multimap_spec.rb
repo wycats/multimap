@@ -7,13 +7,13 @@ describe MultiMap do
 
   it "should store key/value pairs" do
     @map[:foo] = "bar"
-    @map[:foo].should eql(["bar"])
+    @map[:foo].should == ["bar"]
   end
 
   it "should store multiple values at a single key" do
     @map[:foo] = "bar"
-    @map[:foo] = "baz"
-    @map[:foo].should eql(["bar", "baz"])
+    @map.store(:foo, "baz")
+    @map[:foo].should == ["bar", "baz"]
   end
 end
 
@@ -27,12 +27,12 @@ describe MultiMap, "with inital values" do
   end
 
   it "should fetch values at key" do
-    @map["a"].should eql([100])
-    @map["b"].should eql([200])
+    @map["a"].should == [100]
+    @map["b"].should == [200]
   end
 
   it "should return an empty array if not key does not exist" do
-    @map["c"].should eql([])
+    @map["c"].should == []
   end
 
   it "should clear all key/values" do
@@ -41,7 +41,57 @@ describe MultiMap, "with inital values" do
   end
 
   it "should have an empty hash for the default value" do
-    @map.default.should eql([])
+    @map.default.should == []
+  end
+
+  it "should delete all values at key" do
+    @map.delete("a")
+    @map["a"].should == []
+    @map["b"].should == [200]
+  end
+
+  it "should iterate over each key/value pair and yield an array" do
+    a = []
+    @map.each { |pair| a << pair }
+    a.should == [["a", 100], ["b", 200]]
+  end
+
+  it "should iterate over each key/value pair and yield the pair" do
+    h = {}
+    @map.each_pair { |key, value| h[key] = value }
+    h.should == { "a" => 100, "b" => 200}
+  end
+
+  it "should check collections when looking up by value" do
+    @map.has_value?(100).should be_true
+    @map.has_value?(999).should be_false
+  end
+
+  it "should check if key is present" do
+    @map.has_key?("a").should be_true
+    @map.has_key?("z").should be_false
+
+    @map.include?("a").should be_true
+    @map.include?("z").should be_false
+
+    @map.key?("a").should be_true
+    @map.key?("z").should be_false
+
+    @map.member?("a").should be_true
+    @map.member?("z").should be_false
+  end
+
+  it "it should return the key for value" do
+    @map.index(200).should == "b"
+    @map.index(999).should be_nil
+  end
+
+  it "should return an inverted hash" do
+    @map.invert.should == { 100 => "a", 200 => "b" }
+  end
+
+  it "should return all values" do
+    @map.values.should == [100, 200]
   end
 end
 

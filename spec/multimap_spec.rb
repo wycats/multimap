@@ -1,22 +1,5 @@
 require 'lib/multimap'
 
-describe MultiMap do
-  before do
-    @map = MultiMap.new
-  end
-
-  it "should store key/value pairs" do
-    @map[:foo] = "bar"
-    @map[:foo].should == ["bar"]
-  end
-
-  it "should store multiple values at a single key" do
-    @map[:foo] = "bar"
-    @map.store(:foo, "baz")
-    @map[:foo].should == ["bar", "baz"]
-  end
-end
-
 describe MultiMap, "with inital values" do
   before do
     @map = MultiMap["a" => 100, "b" => 200]
@@ -29,6 +12,17 @@ describe MultiMap, "with inital values" do
   it "should fetch values at key" do
     @map["a"].should == [100]
     @map["b"].should == [200]
+  end
+
+  it "should store key/value pairs" do
+    @map[:foo] = "bar"
+    @map[:foo].should == ["bar"]
+  end
+
+  it "should store multiple values at a single key" do
+    @map[:foo] = "bar"
+    @map.store(:foo, "baz")
+    @map[:foo].should == ["bar", "baz"]
   end
 
   it "should return an empty array if not key does not exist" do
@@ -86,8 +80,25 @@ describe MultiMap, "with inital values" do
     @map.index(999).should be_nil
   end
 
+  it "should replace the contents of the map" do
+    @map.replace({ "c" => 300, "d" => 400 })
+    @map["a"].should == []
+    @map["c"].should == [300]
+  end
+
   it "should return an inverted hash" do
     @map.invert.should == { 100 => "a", 200 => "b" }
+  end
+
+  it "should return the number of key/value pairs" do
+    @map.length.should == 2
+  end
+
+  it "should update multimap" do
+    @map.update("c" => 300)
+    @map["a"].should == [100]
+    @map["b"].should == [200]
+    @map["c"].should == [300]
   end
 
   it "should return all values" do

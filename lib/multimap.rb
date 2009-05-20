@@ -47,11 +47,44 @@ class MultiMap < Hash
     invert[value]
   end
 
+  def replace(other)
+    case other
+    when Hash
+      default = self.default
+      map = super(other.inject({}) { |h, (k, v)|
+        h[k] = [v]
+        h
+      })
+      map.default = default
+      map
+    when MultiMap
+      super
+    else
+      raise ArgumentError
+    end
+  end
+
   def invert
     h = {}
     each_pair { |key, value| h[value] = key }
     h
   end
+
+  def size
+    values.size
+  end
+  alias_method :length, :size
+
+  def merge(other)
+    dup.update(other)
+  end
+
+  def update(other)
+    other.each_pair do |key, value|
+      store(key, value)
+    end
+  end
+  alias_method :merge!, :update
 
   def values
     super.inject([]) { |values, collection|

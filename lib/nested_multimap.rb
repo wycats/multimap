@@ -1,0 +1,2 @@
+class NestedMultiMap < MultiMap
+end

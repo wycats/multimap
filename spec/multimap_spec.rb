@@ -16,3 +16,31 @@ describe MultiMap do
     @map[:foo].should eql(["bar", "baz"])
   end
 end
+
+describe MultiMap, "with inital values" do
+  before do
+    @map = MultiMap["a" => 100, "b" => 200]
+  end
+
+  it "should be equal to another MultiMap if they contain the same keys and values" do
+    (@map == MultiMap["a" => 100, "b" => 200]).should be_true
+  end
+
+  it "should fetch values at key" do
+    @map["a"].should eql([100])
+    @map["b"].should eql([200])
+  end
+
+  it "should return an empty array if not key does not exist" do
+    @map["c"].should eql([])
+  end
+
+  it "should clear all key/values" do
+    @map.clear
+    @map.should be_empty
+  end
+
+  it "should have an empty hash for the default value" do
+    @map.default.should eql([])
+  end
+end

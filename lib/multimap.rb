@@ -23,6 +23,13 @@ class MultiMap < Hash
   end
   alias_method :[]=, :store
 
+  def dup
+    map = self.class.new
+    each_pair { |key, value| map.store(key, value) }
+    map.default = default
+    map
+  end
+
   def each
     super do |key, values|
       values.each do |value|

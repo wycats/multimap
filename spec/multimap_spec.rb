@@ -48,6 +48,14 @@ shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
     @map["b"].should == [200]
   end
 
+  it "should dup the collection container" do
+    map2 = @map.dup
+    map2.should_not equal(@map)
+    map2.should == @map
+    map2["a"].should_not equal(@map["a"])
+    map2["b"].should_not equal(@map["b"])
+  end
+
   it "should iterate over each key/value pair and yield an array" do
     a = []
     @map.each { |pair| a << pair }

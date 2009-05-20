@@ -86,6 +86,10 @@ class MultiMap < Hash
   end
   alias_method :merge!, :update
 
+  def to_hash
+    dup
+  end
+
   def values
     super.inject([]) { |values, collection|
       values.push(*collection)

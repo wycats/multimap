@@ -94,6 +94,15 @@ describe MultiMap, "with inital values" do
     @map.length.should == 2
   end
 
+  it "should convert to array" do
+    @map.to_a.should == [["a", [100]], ["b", [200]]]
+  end
+
+  it "should convert to hash" do
+    @map.to_hash.should == { "a" => [100], "b" => [200] }
+    @map.to_hash.should_not equal(@map)
+  end
+
   it "should update multimap" do
     @map.update("c" => 300)
     @map["a"].should == [100]
@@ -103,6 +112,10 @@ describe MultiMap, "with inital values" do
 
   it "should return all values" do
     @map.values.should == [100, 200]
+  end
+
+  it "should return return values at keys" do
+    @map.values_at("a", "b").should == [[100], [200]]
   end
 end
 

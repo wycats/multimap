@@ -142,15 +142,10 @@ class MultiMap < Hash
   alias_method :merge!, :update
 
   def select
-    result = []
-    super do |key, values|
-      values.each do |value|
-        if yield(key, value)
-          result << [key, value]
-        end
-      end
-    end
-    result
+    inject([]) { |result, pair|
+      result << pair if yield(pair)
+      result
+    }
   end
 
   def to_a

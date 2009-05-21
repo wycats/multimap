@@ -33,6 +33,14 @@ shared_examples_for Enumerable, MultiMap, "with inital values {'a' => [100], 'b'
     @map.select { |key, value| value >= 200 }.should == [["b", 200], ["b", 300]]
   end
 
+  it "should combine key/value pairs with inject" do
+    @map.inject(0) { |sum, (key, value)| sum + value }.should == 600
+
+    @map.inject(0) { |memo, (key, value)|
+      memo > value ? memo : value
+    }.should == 300
+  end
+
   it "should check for key membership" do
     @map.member?("a").should be_true
     @map.include?("a").should be_true

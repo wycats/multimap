@@ -1,10 +1,11 @@
 require 'nested_multimap'
-require 'spec/multimap_spec'
+
+require 'spec/enumerable_examples'
+require 'spec/hash_examples'
 
 describe NestedMultiMap, "with inital values" do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
     @map = NestedMultiMap["a" => [100], "b" => [200, 300]]

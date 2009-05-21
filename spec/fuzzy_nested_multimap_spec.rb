@@ -1,5 +1,7 @@
 require 'fuzzy_nested_multimap'
-require 'spec/multimap_spec'
+
+require 'spec/enumerable_examples'
+require 'spec/hash_examples'
 
 shared_examples_for "Fuzzy", MultiMap do
   it "should add value to containers that match regexp key" do
@@ -13,7 +15,6 @@ end
 describe FuzzyNestedMultiMap, "with inital values" do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Fuzzy MultiMap"
 
   before do

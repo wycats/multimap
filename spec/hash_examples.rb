@@ -1,6 +1,14 @@
 shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
+  before do
+    @container ||= Array
+  end
+
   it "should be equal to another MultiMap if they contain the same keys and values" do
-    @map.should == MultiMap["a" => [100], "b" => [200, 300]]
+    map2 = MultiMap.new(@container.new)
+    map2["a"] = 100
+    map2["b"] = 200
+    map2["b"] = 300
+    @map.should == map2
   end
 
   it "should not be equal to another MultiMap if they contain different values" do
@@ -8,16 +16,16 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "should retrieve container of values for key" do
-    @map["a"].should == [100]
-    @map["b"].should == [200, 300]
-    @map["z"].should == []
+    @map["a"].should == @container.new([100])
+    @map["b"].should == @container.new([200, 300])
+    @map["z"].should == @container.new
   end
 
   it "should append values to container at key" do
     @map["a"] = 400
     @map.store("b", 500)
-    @map["a"].should == [100, 400]
-    @map["b"].should == [200, 300, 500]
+    @map["a"].should == @container.new([100, 400])
+    @map["b"].should == @container.new([200, 300, 500])
   end
 
   it "should clear all key/values" do
@@ -26,26 +34,41 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "should return immutable default value" do
-    @map.default.should == []
+    @map.default.should == @container.new
     @map.default.should be_frozen
   end
 
   it "should delete all values at key" do
     @map.delete("a")
-    @map["a"].should == []
+    @map["a"].should == @container.new
   end
 
   it "should delete single value at key" do
     @map.delete("b", 200)
-    @map["b"].should == [300]
+    @map["b"].should == @container.new([300])
   end
 
   it "should delete if condition is matched" do
     @map.delete_if { |key, value| key >= "b" }.should == @map
-    @map["a"].should == [100]
-    @map["b"].should == []
+    @map["a"].should == @container.new([100])
+    @map["b"].should == @container.new
 
     @map.delete_if { |key, value| key > "z" }.should == @map
+  end
+
+  it "should duplicate the containers" do
+    map2 = @map.dup
+    map2.should_not equal(@map)
+    map2.should == @map
+    map2["a"].should_not equal(@map["a"])
+    map2["b"].should_not equal(@map["b"])
+  end
+
+  it "should freeze containers" do
+    @map.freeze
+    @map.should be_frozen
+    @map["a"].should be_frozen
+    @map["b"].should be_frozen
   end
 
   it "should iterate over each key/value pair and yield an array" do
@@ -82,8 +105,8 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "should fetch container of values for key" do
-    @map.fetch("a").should == [100]
-    @map.fetch("b").should == [200, 300]
+    @map.fetch("a").should == @container.new([100])
+    @map.fetch("b").should == @container.new([200, 300])
     lambda { @map.fetch("z") }.should raise_error(IndexError)
   end
 
@@ -102,22 +125,22 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "it should return the index for value" do
-    @map.index(200).should == ["b"]
-    @map.index(999).should == []
+    @map.index(200).should == @container.new(["b"])
+    @map.index(999).should == @container.new
   end
 
   it "should replace the contents of hash" do
-    @map.replace({ "c" => [300], "d" => [400] })
-    @map["a"].should == []
-    @map["c"].should == [300]
-  end
-
-  it "should inspect contents" do
-    @map.inspect.should == '{"a"=>[100], "b"=>[200, 300]}'
+    @map.replace({ "c" => @container.new([300]), "d" => @container.new([400]) })
+    @map["a"].should == @container.new
+    @map["c"].should == @container.new([300])
   end
 
   it "should return an inverted MultiMap" do
-    @map.invert.should == MultiMap[100 => "a", 200 => "b", 300 => "b"]
+    map2 = MultiMap.new(@container.new)
+    map2[100] = "a"
+    map2[200] = "b"
+    map2[300] = "b"
+    @map.invert.should == map2
   end
 
   it "should return array of keys" do
@@ -130,33 +153,33 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "should duplicate map and with merged values" do
-    map = @map.merge({ "b" => 254, "c" => 300 })
-    map["a"].should == [100]
-    map["b"].should == [200, 300, 254]
-    map["c"].should == [300]
+    map = @map.merge("b" => 254, "c" => @container.new([300]))
+    map["a"].should == @container.new([100])
+    map["b"].should == @container.new([200, 300, 254])
+    map["c"].should == @container.new([300])
 
-    @map["a"].should == [100]
-    @map["b"].should == [200, 300]
-    @map["c"].should == []
+    @map["a"].should == @container.new([100])
+    @map["b"].should == @container.new([200, 300])
+    @map["c"].should == @container.new
   end
 
   it "should update map" do
-    @map.update("b" => 254, "c" => 300)
-    @map["a"].should == [100]
-    @map["b"].should == [200, 300, 254]
-    @map["c"].should == [300]
+    @map.update("b" => 254, "c" => @container.new([300]))
+    @map["a"].should == @container.new([100])
+    @map["b"].should == @container.new([200, 300, 254])
+    @map["c"].should == @container.new([300])
   end
 
   it "should reject key/value pairs on copy of the map" do
     map = @map.reject { |key, value| key >= "b" }
-    map["b"].should == []
-    @map["b"].should == [200, 300]
+    map["b"].should == @container.new
+    @map["b"].should == @container.new([200, 300])
   end
 
   it "should reject key/value pairs" do
     @map.reject! { |key, value| key >= "b" }.should == @map
-    @map["a"].should == [100]
-    @map["b"].should == []
+    @map["a"].should == @container.new([100])
+    @map["b"].should == @container.new
 
     @map.reject! { |key, value| key >= "z" }.should == nil
   end
@@ -166,20 +189,12 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     @map.select { |k, v| v < 200 }.should == [["a", 100]]
   end
 
-  it "should shift off key/value pair" do
-    @map.shift.should == ["a", 100]
-    @map["a"].should == []
-
-    @map.shift.should == ["b", 200]
-    @map["b"].should == [300]
-  end
-
   it "should convert to array" do
-    @map.to_a.should == [["a", [100]], ["b", [200, 300]]]
+    @map.to_a.should == [["a", @container.new([100])], ["b", @container.new([200, 300])]]
   end
 
   it "should convert to hash" do
-    @map.to_hash.should == { "a" => [100], "b" => [200, 300] }
+    @map.to_hash.should == { "a" => @container.new([100]), "b" => @container.new([200, 300]) }
     @map.to_hash.should_not equal(@map)
   end
 
@@ -188,6 +203,6 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "should return return values at keys" do
-    @map.values_at("a", "b").should == [[100], [200, 300]]
+    @map.values_at("a", "b").should == [@container.new([100]), @container.new([200, 300])]
   end
 end

@@ -28,7 +28,7 @@ class MultiMap < Hash
   alias_method :[]=, :store
 
   def dup
-    map = self.class.new
+    map = self.class.new(default.dup)
     each_pair { |key, value| map.store(key, value) }
     map.default = default
     map
@@ -87,7 +87,13 @@ class MultiMap < Hash
     when Hash
       default = self.default
       map = super(other.inject({}) { |h, (k, v)|
-        h[k] = v.is_a?(Array) ? v : [v]
+        container = default.dup
+        if v.respond_to?(:each)
+          v.each { |v| container << v }
+        else
+          container << v
+        end
+        h[k] = container
         h
       })
       map.default = default
@@ -100,7 +106,7 @@ class MultiMap < Hash
   end
 
   def invert
-    h = MultiMap.new
+    h = MultiMap.new(default.dup)
     each_pair { |key, value| h[value] = key }
     h
   end
@@ -119,7 +125,12 @@ class MultiMap < Hash
     when Hash
       other.each_pair do |key, values|
         update_container(key) do |container|
-          container.push(*values)
+          if values.respond_to?(:each)
+            values.each { |value| container << value }
+          else
+            container << values
+          end
+          container
         end
       end
     else
@@ -139,17 +150,6 @@ class MultiMap < Hash
         end
       end
     end
-    result
-  end
-
-  def shift
-    key, container = nil, nil
-    each_pair_list do |k, v|
-      key, container = k, v
-      break
-    end
-    result = [key, container.shift]
-    delete(key) if container.empty?
     result
   end
 

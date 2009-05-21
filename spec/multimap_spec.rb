@@ -4,7 +4,7 @@ require 'spec/enumerable_examples.rb'
 require 'spec/hash_examples.rb'
 
 shared_examples_for MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
-  it "should dup the collection container" do
+  it "should dup the container" do
     map2 = @map.dup
     map2.should_not equal(@map)
     map2.should == @map
@@ -18,6 +18,13 @@ shared_examples_for MultiMap, "with inital values {'a' => [100], 'b' => [200, 30
 
   it "should have an empty hash for the default value" do
     @map.default.should == []
+  end
+
+  it "should freeze containers" do
+    @map.freeze
+    @map.should be_frozen
+    @map["a"].should be_frozen
+    @map["b"].should be_frozen
   end
 end
 

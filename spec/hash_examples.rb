@@ -7,13 +7,13 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     @map.should_not == MultiMap["a" => [100], "b" => [200]]
   end
 
-  it "should retrieve collection of values for key" do
+  it "should retrieve container of values for key" do
     @map["a"].should == [100]
     @map["b"].should == [200, 300]
     @map["z"].should == []
   end
 
-  it "should append values to collection at key" do
+  it "should append values to container at key" do
     @map["a"] = 400
     @map.store("b", 500)
     @map["a"].should == [100, 400]
@@ -81,7 +81,7 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     @map.should_not be_empty
   end
 
-  it "should fetch collection of values for key" do
+  it "should fetch container of values for key" do
     @map.fetch("a").should == [100]
     @map.fetch("b").should == [200, 300]
     lambda { @map.fetch("z") }.should raise_error(IndexError)
@@ -94,7 +94,7 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     @map.key?("z").should be_false
   end
 
-  it "should check collections when looking up by value" do
+  it "should check containers when looking up by value" do
     @map.has_value?(100).should be_true
     @map.value?(100).should be_true
     @map.has_value?(999).should be_false

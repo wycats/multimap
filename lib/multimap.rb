@@ -68,6 +68,11 @@ class MultiMap < Hash
     end
   end
 
+  def freeze
+    each_pair_list { |key, container| container.freeze }
+    super
+  end
+
   def has_value?(value)
     values.include?(value)
   end
@@ -138,13 +143,13 @@ class MultiMap < Hash
   end
 
   def shift
-    key, collection = nil, nil
+    key, container = nil, nil
     each_pair_list do |k, v|
-      key, collection = k, v
+      key, container = k, v
       break
     end
-    result = [key, collection.shift]
-    delete(key) if collection.empty?
+    result = [key, container.shift]
+    delete(key) if container.empty?
     result
   end
 
@@ -153,8 +158,8 @@ class MultiMap < Hash
   end
 
   def values
-    super.inject([]) { |values, collection|
-      values.push(*collection)
+    super.inject([]) { |values, container|
+      values.push(*container)
       values
     }
   end

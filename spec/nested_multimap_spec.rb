@@ -27,6 +27,8 @@ end
 
 describe NestedMultiMap, "with inital values" do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+
   it_should_behave_like "Default MultiMap"
   it_should_behave_like "MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 

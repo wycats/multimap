@@ -34,6 +34,14 @@ class MultiMap < Hash
     map
   end
 
+  def delete(key, value = nil)
+    if value
+      hash_aref(key).delete(value)
+    else
+      super(key)
+    end
+  end
+
   alias_method :each_pair_list, :each_pair
 
   def each
@@ -44,7 +52,7 @@ class MultiMap < Hash
     end
   end
 
-  def each_pair(&block)
+  def each_pair
     super do |key, values|
       values.each do |value|
         yield key, value
@@ -52,9 +60,18 @@ class MultiMap < Hash
     end
   end
 
+  def each_value
+    super do |values|
+      values.each do |value|
+        yield value
+      end
+    end
+  end
+
   def has_value?(value)
     values.include?(value)
   end
+  alias_method :value?, :has_value?
 
   def index(value)
     invert[value]
@@ -65,7 +82,7 @@ class MultiMap < Hash
     when Hash
       default = self.default
       map = super(other.inject({}) { |h, (k, v)|
-        h[k] = [v]
+        h[k] = v.is_a?(Array) ? v : [v]
         h
       })
       map.default = default
@@ -93,11 +110,43 @@ class MultiMap < Hash
   end
 
   def update(other)
-    other.each_pair do |key, value|
-      store(key, value)
+    case other
+    when Hash
+      other.each_pair do |key, values|
+        update_container(key) do |container|
+          container.push(*values)
+        end
+      end
+    else
+      raise ArgumentError
     end
+
+    self
   end
   alias_method :merge!, :update
+
+  def select
+    result = []
+    super do |key, values|
+      values.each do |value|
+        if yield(key, value)
+          result << [key, value]
+        end
+      end
+    end
+    result
+  end
+
+  def shift
+    key, collection = nil, nil
+    each_pair_list do |k, v|
+      key, collection = k, v
+      break
+    end
+    result = [key, collection.shift]
+    delete(key) if collection.empty?
+    result
+  end
 
   def to_hash
     dup

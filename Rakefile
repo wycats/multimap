@@ -21,3 +21,13 @@ Spec::Rake::SpecTask.new do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
   t.spec_opts = ["-c", "-fs"]
 end
+
+begin
+  gem 'rake-compiler'
+  require 'rake/extensiontask'
+
+  Rake::ExtensionTask.new do |ext|
+    ext.name = 'nested_multimap_ext'
+  end
+rescue Gem::LoadError
+end

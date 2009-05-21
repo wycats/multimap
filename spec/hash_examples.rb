@@ -189,10 +189,6 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     @map.select { |k, v| v < 200 }.should == [["a", 100]]
   end
 
-  it "should convert to array" do
-    @map.to_a.should == [["a", @container.new([100])], ["b", @container.new([200, 300])]]
-  end
-
   it "should convert to hash" do
     @map.to_hash.should == { "a" => @container.new([100]), "b" => @container.new([200, 300]) }
     @map.to_hash.should_not equal(@map)

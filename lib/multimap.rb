@@ -153,6 +153,14 @@ class MultiMap < Hash
     result
   end
 
+  def to_a
+    ary = []
+    each_pair do |key, value|
+      ary << [key, value]
+    end
+    ary
+  end
+
   def to_hash
     dup
   end

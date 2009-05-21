@@ -14,7 +14,7 @@ end
 
 require 'set'
 
-describe MultiMap, "with a Set collection" do
+describe MultiMap, "with a", Set do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
@@ -25,13 +25,46 @@ describe MultiMap, "with a Set collection" do
     @map["b"] = 200
     @map["b"] = 300
   end
+end
 
-  it "should return an empty set if not key does not exist" do
-    @map["c"].should == [].to_set
+
+class MiniArray
+  instance_methods.each { |m| undef_method m unless m =~ /^__|^object_id$/ }
+
+  def initialize(ary = [])
+    @ary = ary
   end
 
-  it "should return containers as a Set" do
-    @map["a"].should == [100].to_set
-    @map["b"].should == [200, 300].to_set
+  def <<(value)
+    @ary << value
+  end
+
+  def each(&block)
+    @ary.each(&block)
+  end
+
+  def ==(other)
+    @ary == other
+  end
+
+  def respond_to?(sym)
+    @ary.respond_to?(sym)
+  end
+
+  def freeze
+    @ary.freeze
+  end
+end
+
+describe MultiMap, "with ", MiniArray do
+  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+
+  before do
+    @container = MiniArray
+    @map = MultiMap.new(@container.new)
+    @map["a"] = 100
+    @map["b"] = 200
+    @map["b"] = 300
   end
 end

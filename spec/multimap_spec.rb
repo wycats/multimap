@@ -37,7 +37,7 @@ describe MultiMap, "with a Set collection" do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
-    @map = MultiMap.new(Set)
+    @map = MultiMap.new(Set.new)
     @map["a"] = 100
     @map["b"] = 200
     @map["b"] = 300

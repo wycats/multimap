@@ -1,12 +1,6 @@
 require 'multimap'
 
 class NestedMultiMap < MultiMap
-  def initialize(default = [])
-    map = super()
-    map.default = default.freeze
-    map
-  end
-
   def store(*args)
     args.flatten!
     value = args.pop

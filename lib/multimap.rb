@@ -12,8 +12,8 @@ class MultiMap < Hash
     map
   end
 
-  def initialize(collection_klass = Array)
-    super(collection_klass.new.freeze)
+  def initialize(default = [])
+    super(default.freeze)
   end
 
   alias_method :hash_aref, :[]

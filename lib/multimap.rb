@@ -18,8 +18,8 @@ class MultiMap < Hash
 
   alias_method :hash_aref, :[]
   alias_method :hash_aset, :[]=
-  alias_method :hash_values, :values
-  private :hash_aref, :hash_aset, :values
+  alias_method :hash_each_pair, :each_pair
+  private :hash_aref, :hash_aset, :hash_each_pair
 
   def store(key, value)
     update_container(key) do |container|

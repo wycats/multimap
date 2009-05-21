@@ -1,92 +1,40 @@
-# TODO: Inheirt from NestedMultiMap
-class FuzzyNestedMultiMap < Hash
-  def initialize(default = [])
-    super(default)
-  end
+require 'nested_multimap'
 
-  alias_method :at, :[]
-
+class FuzzyNestedMultiMap < NestedMultiMap
   WILD_REGEXP = /.*/.freeze
 
   def []=(*args)
-    args  = args.flatten
+    args.flatten!
     value = args.pop
-    key   = args.shift.freeze
+    key   = args.shift
     key   = WILD_REGEXP if key.nil?
-    keys  = args.freeze
+    keys  = args
 
-    raise ArgumentError, 'missing value' unless value
+    raise ArgumentError, 'wrong number of arguments (1 for 2)' unless value
 
     case key
     when Regexp
       if keys.empty?
-        each { |k, v| v << value if key =~ k }
-        default << value
+        hash_each_pair { |k, v| v << value if key =~ k }
+        append_to_default_container!(value)
       else
         self.keys.each { |k|
           if key =~ k
-            v = at(k)
-            v = v.dup if v.equal?(default)
-            v = NestedSet.new(v) if v.is_a?(Array)
-            v[keys.dup] = value
-            super(k, v)
+            update_container(k) do |container|
+              container = self.class.new(container) if container.is_a?(default.class)
+              container.store(keys, value)
+              container
+            end
           end
         }
 
-        self.default = NestedSet.new(default) if default.is_a?(Array)
+        self.default = self.class.new(default) if default.is_a?(default.class)
         default[keys.dup] = value
       end
     when String
-      v = at(key)
-      v = v.dup if v.equal?(default)
-
-      if keys.empty?
-        v << value
-      else
-        v = NestedSet.new(v) if v.is_a?(Array)
-        v[keys.dup] = value
-      end
-
-      super(key, v)
+      super(key, keys, value)
     else
-      raise ArgumentError, 'unsupported key'
+      raise ArgumentError, "unsupported key: #{key.inspect}"
     end
-  end
-
-  def dup
-    set = self.class.new
-    each { |k, v| set.store(k, v.dup) }
-    set.default = default.dup
-    set
-  end
-
-  def [](*keys)
-    result, i = self, 0
-    until result.is_a?(Array)
-      result = result.at(keys[i])
-      i += 1
-    end
-    result
-  end
-
-  def <<(value)
-    values_with_default.each { |e| e << value }
-    nil
-  end
-
-  def values_with_default
-    values.push(default)
-  end
-
-  def inspect
-    super.gsub(/\}$/, ", nil => #{default.inspect}}")
-  end
-
-  def freeze
-    values_with_default.each { |v|
-      v.each { |e| e.freeze } if v.is_a?(Array)
-      v.freeze
-    }
-    super
   end
 end

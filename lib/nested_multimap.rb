@@ -1,3 +1,5 @@
+require 'multimap'
+
 class NestedMultiMap < MultiMap
   def initialize(default = [])
     map = super()
@@ -26,9 +28,8 @@ class NestedMultiMap < MultiMap
   alias_method :[]=, :store
 
   def <<(value)
-    hash_values.each { |container| container.push(value) }
-    self.default = default.dup.push(value)
-    self.default.freeze
+    hash_each_pair { |key, container| container.push(value) }
+    append_to_default_container!(value)
     nil
   end
 
@@ -44,4 +45,10 @@ class NestedMultiMap < MultiMap
       raise RuntimeError
     end
   end
+
+  private
+    def append_to_default_container!(value)
+      self.default = self.default.dup.push(value)
+      self.default.freeze
+    end
 end

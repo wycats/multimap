@@ -1,10 +1,14 @@
-require 'nested_multimap'
+require 'fuzzy_nested_multimap'
+require 'spec/multimap_spec'
 
-describe "Default", NestedMultiMap do
+shared_examples_for "Fuzzy", MultiMap do
+end
+
+describe "Default", FuzzyNestedMultiMap do
   it_should_behave_like "Default MultiMap"
 
   before do
-    @map = NestedMultiMap.new
+    @map = FuzzyNestedMultiMap.new
   end
 
   it "should set value at nested key" do
@@ -18,25 +22,32 @@ describe "Default", NestedMultiMap do
     @map.default.should == [300]
   end
 
-  it "default values should be copied to new containers" do
+  it "should copy default values to new containers" do
     @map << 300
     @map["a"] = 100
     @map["a"].should == [300, 100]
   end
 end
 
-describe NestedMultiMap, "with inital values" do
+describe FuzzyNestedMultiMap, "with inital values" do
   it_should_behave_like "Default MultiMap"
   it_should_behave_like "MultiMap with inital values {'a' => 100, 'b' => 200}"
 
   before do
-    @map = NestedMultiMap["a" => 100, "b" => 200]
+    @map = FuzzyNestedMultiMap["a" => 100, "b" => 200]
   end
 
   it "should append the value to all containers" do
     @map << 300
     @map["a"].should == [100, 300]
     @map["b"].should == [200, 300]
+    @map.default.should == [300]
+  end
+
+  it "should add value to containers that match regexp key" do
+    @map[/^a$/] = 300
+    @map["a"].should == [100, 300]
+    @map["b"].should == [200]
     @map.default.should == [300]
   end
 end

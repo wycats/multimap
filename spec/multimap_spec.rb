@@ -1,15 +1,15 @@
-require 'lib/multimap'
+require 'multimap'
 
 shared_examples_for "Default", MultiMap do
   it "should store key/value pairs" do
-    @map[:foo] = "bar"
-    @map[:foo].should == ["bar"]
+    @map["foo"] = "bar"
+    @map["foo"].should == ["bar"]
   end
 
   it "should store multiple values at a single key" do
-    @map[:foo] = "bar"
-    @map.store(:foo, "baz")
-    @map[:foo].should == ["bar", "baz"]
+    @map["foo"] = "bar"
+    @map.store("foo", "baz")
+    @map["foo"].should == ["bar", "baz"]
   end
 
   it "should return an empty array if not key does not exist" do

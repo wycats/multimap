@@ -88,12 +88,12 @@ shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
   end
 
   it "it should return the key for value" do
-    @map.index(200).should == "b"
-    @map.index(999).should be_nil
+    @map.index(200).should == ["b"]
+    @map.index(999).should == []
   end
 
   it "should return an inverted hash" do
-    @map.invert.should == { 100 => "a", 200 => "b" }
+    @map.invert.should == MultiMap[100 => "a", 200 => "b"]
   end
 
   it "should return the number of key/value pairs" do

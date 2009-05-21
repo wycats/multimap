@@ -78,7 +78,7 @@ class MultiMap < Hash
   end
 
   def invert
-    h = {}
+    h = MultiMap.new
     each_pair { |key, value| h[value] = key }
     h
   end

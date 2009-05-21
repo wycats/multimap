@@ -3,16 +3,13 @@ require 'multimap'
 require 'spec/enumerable_examples.rb'
 require 'spec/hash_examples.rb'
 
-shared_examples_for "Default", MultiMap do
-  it "should store key/value pairs" do
-    @map["foo"] = "bar"
-    @map["foo"].should == ["bar"]
-  end
-
-  it "should store multiple values at a single key" do
-    @map["foo"] = "bar"
-    @map.store("foo", "baz")
-    @map["foo"].should == ["bar", "baz"]
+shared_examples_for MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
+  it "should dup the collection container" do
+    map2 = @map.dup
+    map2.should_not equal(@map)
+    map2.should == @map
+    map2["a"].should_not equal(@map["a"])
+    map2["b"].should_not equal(@map["b"])
   end
 
   it "should return an empty array if not key does not exist" do
@@ -24,21 +21,9 @@ shared_examples_for "Default", MultiMap do
   end
 end
 
-shared_examples_for MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
-  it "should dup the collection container" do
-    map2 = @map.dup
-    map2.should_not equal(@map)
-    map2.should == @map
-    map2["a"].should_not equal(@map["a"])
-    map2["b"].should_not equal(@map["b"])
-  end
-end
-
 describe MultiMap, "with inital values" do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-
-  it_should_behave_like "Default MultiMap"
   it_should_behave_like "MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do

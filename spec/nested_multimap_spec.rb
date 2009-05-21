@@ -1,4 +1,5 @@
 require 'nested_multimap'
+require 'spec/multimap_spec'
 
 describe NestedMultiMap, "with inital values" do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"

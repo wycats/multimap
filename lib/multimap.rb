@@ -28,9 +28,8 @@ class MultiMap < Hash
   alias_method :[]=, :store
 
   def dup
-    map = self.class.new(default.dup)
-    each_pair { |key, value| map.store(key, value) }
-    map.default = default
+    map = super.clear
+    each_pair { |key, value| map[key] = value }
     map
   end
 

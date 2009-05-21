@@ -28,16 +28,12 @@ class NestedMultiMap < MultiMap
   end
 
   def [](*keys)
-    keys.flatten!
-    value = super(keys.shift)
-    case value
-    when self.class
-      value[keys]
-    when default.class
-      value
-    else
-      raise RuntimeError
+    result, i = self, 0
+    until result.is_a?(default.class)
+      result = result.hash_aref(keys[i])
+      i += 1
     end
+    result
   end
 
   private

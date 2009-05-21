@@ -2,7 +2,7 @@ class MultiMap < Hash
   def self.[](*args)
     if args.first.is_a?(Hash)
       args[0] = args.first.inject({}) { |h, (k, v)|
-        h[k] = [v]
+        h[k] = v.is_a?(Array) ? v : [v]
         h
       }
     end

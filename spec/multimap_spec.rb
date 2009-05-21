@@ -1,5 +1,7 @@
 require 'multimap'
 
+require 'spec/enumerable_examples.rb'
+
 shared_examples_for "Default", MultiMap do
   it "should store key/value pairs" do
     @map["foo"] = "bar"
@@ -32,20 +34,20 @@ shared_examples_for "Default", MultiMap do
   end
 end
 
-shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
+shared_examples_for MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
   it "should fetch values at key" do
     @map["a"].should == [100]
-    @map["b"].should == [200]
+    @map["b"].should == [200, 300]
   end
 
   it "should be equal to another MultiMap if they contain the same keys and values" do
-    @map.should == MultiMap["a" => 100, "b" => 200]
+    @map.should == MultiMap["a" => [100], "b" => [200, 300]]
   end
 
   it "should delete all values at key" do
     @map.delete("a")
     @map["a"].should == []
-    @map["b"].should == [200]
+    @map["b"].should == [200, 300]
   end
 
   it "should dup the collection container" do
@@ -59,13 +61,13 @@ shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
   it "should iterate over each key/value pair and yield an array" do
     a = []
     @map.each { |pair| a << pair }
-    a.should == [["a", 100], ["b", 200]]
+    a.should == [["a", 100], ["b", 200], ["b", 300]]
   end
 
   it "should iterate over each key/value pair and yield the pair" do
     h = {}
-    @map.each_pair { |key, value| h[key] = value }
-    h.should == { "a" => 100, "b" => 200}
+    @map.each_pair { |key, value| (h[key] ||= []) << value }
+    h.should == { "a" => [100], "b" => [200, 300] }
   end
 
   it "should check collections when looking up by value" do
@@ -77,14 +79,8 @@ shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
     @map.has_key?("a").should be_true
     @map.has_key?("z").should be_false
 
-    @map.include?("a").should be_true
-    @map.include?("z").should be_false
-
     @map.key?("a").should be_true
     @map.key?("z").should be_false
-
-    @map.member?("a").should be_true
-    @map.member?("z").should be_false
   end
 
   it "it should return the key for value" do
@@ -93,54 +89,58 @@ shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
   end
 
   it "should return an inverted hash" do
-    @map.invert.should == MultiMap[100 => "a", 200 => "b"]
+    @map.invert.should == MultiMap[100 => "a", 200 => "b", 300 => "b"]
   end
 
   it "should return the number of key/value pairs" do
-    @map.length.should == 2
+    @map.length.should == 3
   end
 
   it "should convert to array" do
-    @map.to_a.should == [["a", [100]], ["b", [200]]]
+    @map.to_a.should == [["a", [100]], ["b", [200, 300]]]
   end
 
   it "should convert to hash" do
-    @map.to_hash.should == { "a" => [100], "b" => [200] }
+    @map.to_hash.should == { "a" => [100], "b" => [200, 300] }
     @map.to_hash.should_not equal(@map)
   end
 
   it "should update multimap" do
-    @map.update("c" => 300)
+    @map.update("c" => 500)
     @map["a"].should == [100]
-    @map["b"].should == [200]
-    @map["c"].should == [300]
+    @map["b"].should == [200, 300]
+    @map["c"].should == [500]
   end
 
   it "should return all values" do
-    @map.values.should == [100, 200]
+    @map.values.should == [100, 200, 300]
   end
 
   it "should return return values at keys" do
-    @map.values_at("a", "b").should == [[100], [200]]
+    @map.values_at("a", "b").should == [[100], [200, 300]]
   end
 end
 
 describe MultiMap, "with inital values" do
+  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Default MultiMap"
-  it_should_behave_like "MultiMap with inital values {'a' => 100, 'b' => 200}"
+  it_should_behave_like "MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
-    @map = MultiMap["a" => 100, "b" => 200]
+    @map = MultiMap["a" => [100], "b" => [200, 300]]
   end
 end
 
 require 'set'
 
 describe MultiMap, "with a Set collection" do
+  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+
   before do
     @map = MultiMap.new(Set)
     @map["a"] = 100
     @map["b"] = 200
+    @map["b"] = 300
   end
 
   it "should return an empty set if not key does not exist" do
@@ -149,6 +149,6 @@ describe MultiMap, "with a Set collection" do
 
   it "should return values as a Set" do
     @map["a"].should == [100].to_set
-    @map["b"].should == [200].to_set
+    @map["b"].should == [200, 300].to_set
   end
 end

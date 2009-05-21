@@ -26,17 +26,18 @@ describe "Default", NestedMultiMap do
 end
 
 describe NestedMultiMap, "with inital values" do
+  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Default MultiMap"
-  it_should_behave_like "MultiMap with inital values {'a' => 100, 'b' => 200}"
+  it_should_behave_like "MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
-    @map = NestedMultiMap["a" => 100, "b" => 200]
+    @map = NestedMultiMap["a" => [100], "b" => [200, 300]]
   end
 
   it "should append the value to all containers" do
-    @map << 300
-    @map["a"].should == [100, 300]
-    @map["b"].should == [200, 300]
-    @map.default.should == [300]
+    @map << 500
+    @map["a"].should == [100, 500]
+    @map["b"].should == [200, 300, 500]
+    @map.default.should == [500]
   end
 end

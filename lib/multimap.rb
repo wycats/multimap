@@ -18,8 +18,7 @@ class MultiMap < Hash
 
   alias_method :hash_aref, :[]
   alias_method :hash_aset, :[]=
-  alias_method :hash_each_pair, :each_pair
-  private :hash_aref, :hash_aset, :hash_each_pair
+  private :hash_aref, :hash_aset
 
   def store(key, value)
     update_container(key) do |container|
@@ -34,6 +33,8 @@ class MultiMap < Hash
     map.default = default
     map
   end
+
+  alias_method :each_pair_list, :each_pair
 
   def each
     super do |key, values|

@@ -15,7 +15,7 @@ class FuzzyNestedMultiMap < NestedMultiMap
     case key
     when Regexp
       if keys.empty?
-        hash_each_pair { |k, v| v << value if key =~ k }
+        each_pair_list { |k, l| l << value if key =~ k }
         append_to_default_container!(value)
       else
         self.keys.each { |k|

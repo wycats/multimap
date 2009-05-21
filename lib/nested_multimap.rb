@@ -28,7 +28,7 @@ class NestedMultiMap < MultiMap
   alias_method :[]=, :store
 
   def <<(value)
-    hash_each_pair { |key, container| container.push(value) }
+    each_pair_list { |key, container| container.push(value) }
     append_to_default_container!(value)
     nil
   end

@@ -8,7 +8,7 @@ class MultiMap < Hash
     end
 
     map = super
-    map.default = []
+    map.default = [].freeze
     map
   end
 
@@ -16,10 +16,15 @@ class MultiMap < Hash
     super(collection_klass.new.freeze)
   end
 
+  alias_method :hash_aref, :[]
+  alias_method :hash_aset, :[]=
+  alias_method :hash_values, :values
+  private :hash_aref, :hash_aset, :values
+
   def store(key, value)
-    values = self[key].dup
-    values << value
-    super(key, values)
+    update_container(key) do |container|
+      container << value
+    end
   end
   alias_method :[]=, :store
 
@@ -64,7 +69,7 @@ class MultiMap < Hash
       })
       map.default = default
       map
-    when MultiMap
+    when self.class
       super
     else
       raise ArgumentError
@@ -103,4 +108,12 @@ class MultiMap < Hash
       values
     }
   end
+
+  protected
+    def update_container(key)
+      container = hash_aref(key)
+      container = container.dup if container.equal?(default)
+      container = yield(container)
+      hash_aset(key, container)
+    end
 end

@@ -1,11 +1,6 @@
 require 'lib/multimap'
 
 shared_examples_for "Default", MultiMap do
-  it "should fetch values at key" do
-    @map["a"].should == [100]
-    @map["b"].should == [200]
-  end
-
   it "should store key/value pairs" do
     @map[:foo] = "bar"
     @map[:foo].should == ["bar"]
@@ -38,6 +33,11 @@ shared_examples_for "Default", MultiMap do
 end
 
 shared_examples_for MultiMap, "with inital values {'a' => 100, 'b' => 200}" do
+  it "should fetch values at key" do
+    @map["a"].should == [100]
+    @map["b"].should == [200]
+  end
+
   it "should be equal to another MultiMap if they contain the same keys and values" do
     @map.should == MultiMap["a" => 100, "b" => 200]
   end

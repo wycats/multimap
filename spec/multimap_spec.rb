@@ -56,25 +56,14 @@ class MiniArray
     @data.delete(value)
   end
 
-  def ==(other)
-    case other
-    when MiniArray
-      @data == other.data
-    when Array
-      @data == other
-    else
-      false
-    end
-  end
-
-  def to_ary
-    @data.to_ary
-  end
-
   def dup
     ary = super
     ary.data = @data.dup
     ary
+  end
+
+  def ==(other)
+    other.is_a?(self.class) && @data == other.data
   end
 end
 

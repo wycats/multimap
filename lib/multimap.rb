@@ -84,7 +84,14 @@ class MultiMap < Hash
     end
   end
 
-  alias_method :each_list, :each_value
+  alias_method :hash_each_value, :each_value
+  protected :hash_each_value
+
+  def each_list(&block)
+    hash_each_value(&block)
+    block.call(default)
+    self
+  end
 
   def each_value
     super do |values|
@@ -92,6 +99,10 @@ class MultiMap < Hash
         yield value
       end
     end
+    default.each do |value|
+      yield
+    end
+    self
   end
 
   def freeze
@@ -174,13 +185,19 @@ class MultiMap < Hash
     dup
   end
 
-  alias_method :lists, :values
+  alias_method :hash_values, :values
+  protected :hash_values
+
+  def lists
+    hash_values.push(default)
+  end
 
   def values
     values = []
     each_pair_list do |_, container|
       container.each { |value| values << value }
     end
+    default.each { |value| values << value }
     values
   end
 

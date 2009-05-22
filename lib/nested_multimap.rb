@@ -37,7 +37,7 @@ class NestedMultiMap < MultiMap
 
   def lists
     descendants = []
-    each_list_with_default do |container|
+    each_list do |container|
       if container.respond_to?(:lists)
         container.lists.each do |descendant|
           descendants << descendant
@@ -50,12 +50,6 @@ class NestedMultiMap < MultiMap
   end
 
   private
-    def each_list_with_default
-      each_pair_list { |_, container| yield container }
-      yield default
-      nil
-    end
-
     def append_to_default_container!(value)
       self.default = self.default.dup
       self.default << value

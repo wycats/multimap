@@ -21,7 +21,7 @@ class NestedMultiMap < MultiMap
   alias_method :[]=, :store
 
   def <<(value)
-    each_pair_list { |key, container| container << value }
+    hash_each_value { |container| container << value }
     append_to_default_container!(value)
     nil
   end
@@ -35,6 +35,18 @@ class NestedMultiMap < MultiMap
     result
   end
 
+  def each_list(&block)
+    super do |container|
+      if container.respond_to?(:lists)
+        container.lists.each do |value|
+          block.call(value)
+        end
+      else
+        block.call(container)
+      end
+    end
+  end
+
   def each_value(&block)
     values = []
     lists.each do |container|
@@ -46,20 +58,6 @@ class NestedMultiMap < MultiMap
       end
     end
     self
-  end
-
-  def lists
-    descendants = []
-    each_list do |container|
-      if container.respond_to?(:lists)
-        container.lists.each do |descendant|
-          descendants << descendant
-        end
-      else
-        descendants << container
-      end
-    end
-    descendants
   end
 
   private

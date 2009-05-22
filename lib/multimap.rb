@@ -189,7 +189,9 @@ class MultiMap < Hash
   protected :hash_values
 
   def lists
-    hash_values.push(default)
+    lists = []
+    each_list { |container| lists << container }
+    lists
   end
 
   def values

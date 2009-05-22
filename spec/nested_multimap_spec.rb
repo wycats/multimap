@@ -18,14 +18,14 @@ describe NestedMultiMap, "with inital values" do
 
   it "should append the value to default containers" do
     @map << 300
-    @map.default.should == [300]
+    @map[nil].should == [300]
   end
 
   it "should append the value to all containers" do
     @map << 500
     @map["a"].should == [100, 500]
     @map["b"].should == [200, 300, 500]
-    @map.default.should == [500]
+    @map[nil].should == [500]
   end
 
   it "default values should be copied to new containers" do
@@ -60,6 +60,57 @@ describe NestedMultiMap, "with nested values" do
     @map["a", "b"].should == [100]
     @map["b", "c"].should == [200, 300]
     @map["c", "e"].should == [400, 500]
+  end
+
+  it "should append the value to default containers" do
+    @map << 600
+    @map["a"].should == [100, 600]
+    @map["b"].should == [200, 600]
+    @map["c"].should == [500, 600]
+    @map["a", "b"].should == [100, 600]
+    @map["b", "c"].should == [200, 300, 600]
+    @map["c", "e"].should == [400, 500, 600]
+    @map[nil].should == [600]
+  end
+
+  it "should iterate over each key/value pair and yield an array" do
+    pending "not sure what the correct behavior should be"
+    a = []
+    @map.each { |pair| a << pair }
+    a.should == "?"
+  end
+
+  it "should iterate over each key/container" do
+    pending "not sure what the correct behavior should be"
+    a = []
+    @map.each_pair_list { |key, container| a << [key, container] }
+    a.should == "?"
+  end
+
+  it "should iterate over each key" do
+    pending "not sure what the correct behavior should be"
+    a = []
+    @map.each_key { |key| a << key }
+    a.should == "?"
+  end
+
+  it "should iterate over each key/value pair and yield the pair" do
+    pending "not sure what the correct behavior should be"
+    h = {}
+    @map.each_pair { |key, value| (h[key] ||= []) << value }
+    h.should == "?"
+  end
+
+  it "should iterate over each container" do
+    a = []
+    @map.each_list { |container| a << container }
+    a.should == [[100], [200, 300], [200], [400, 500], [500], []]
+  end
+
+  it "should iterate over each value" do
+    a = []
+    @map.each_value { |value| a << value }
+    a.should == [100, 200, 300, 400, 500]
   end
 
   it "should list all containers" do

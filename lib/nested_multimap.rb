@@ -35,6 +35,19 @@ class NestedMultiMap < MultiMap
     result
   end
 
+  def each_value(&block)
+    values = []
+    lists.each do |container|
+      container.each do |value|
+        unless values.include?(value)
+          values << value
+          block.call(value)
+        end
+      end
+    end
+    self
+  end
+
   def lists
     descendants = []
     each_list do |container|

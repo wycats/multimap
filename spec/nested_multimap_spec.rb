@@ -37,6 +37,10 @@ describe NestedMultiMap, "with inital values" do
   it "should list all containers" do
     @map.lists.should == [[100], [200, 300], []]
   end
+
+  it "should list all values" do
+    @map.values.should == [100, 200, 300]
+  end
 end
 
 describe NestedMultiMap, "with nested values" do
@@ -60,5 +64,9 @@ describe NestedMultiMap, "with nested values" do
 
   it "should list all containers" do
     @map.lists.should == [[100], [200, 300], [200], [400, 500], [500], []]
+  end
+
+  it "should list all values" do
+    @map.values.should == [100, 200, 300, 400, 500]
   end
 end

@@ -194,10 +194,7 @@ class MultiMap < Hash
 
   def values
     values = []
-    each_pair_list do |_, container|
-      container.each { |value| values << value }
-    end
-    default.each { |value| values << value }
+    each_value { |value| values << value }
     values
   end
 

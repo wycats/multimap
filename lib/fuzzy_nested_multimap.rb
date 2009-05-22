@@ -4,16 +4,14 @@ class FuzzyNestedMultiMap < NestedMultiMap
   WILD_REGEXP = /.*/.freeze
 
   def []=(*args)
-    args.flatten!
-    value = args.pop
-    key   = args.shift
-    key   = WILD_REGEXP if key.nil?
-    keys  = args
-
-    raise ArgumentError, 'wrong number of arguments (1 for 2)' unless value
-
-    case key
+    case args.first
     when Regexp
+      value = args.pop
+      key   = args.shift || WILD_REGEXP
+      keys  = args
+
+      raise ArgumentError, 'wrong number of arguments (1 for 2)' unless value
+
       if keys.empty?
         each_pair_list { |k, l| l << value if key =~ k }
         append_to_default_container!(value)
@@ -32,9 +30,9 @@ class FuzzyNestedMultiMap < NestedMultiMap
         default[keys.dup] = value
       end
     when String
-      super(key, keys, value)
+      super(*args)
     else
-      raise ArgumentError, "unsupported key: #{key.inspect}"
+      raise ArgumentError, "unsupported key: #{args.first.inspect}"
     end
   end
 end

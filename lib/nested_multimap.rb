@@ -2,7 +2,6 @@ require 'multimap'
 
 class NestedMultiMap < MultiMap
   def store(*args)
-    args.flatten!
     value = args.pop
     key   = args.shift
     keys  = args
@@ -14,7 +13,7 @@ class NestedMultiMap < MultiMap
     else
       update_container(key) do |container|
         container = self.class.new(container) if container.is_a?(default.class)
-        container.store(keys, value)
+        container[*keys] = value
         container
       end
     end

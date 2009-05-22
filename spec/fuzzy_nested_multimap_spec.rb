@@ -35,6 +35,20 @@ shared_examples_for "Fuzzy", MultiMap do
     @map[nil].should == []
     @map[nil, "c"].should == [500]
   end
+
+  it "should work with another crazy situation" do
+    pending
+
+    @map[nil, "c"] = 400
+    @map["b", "c"] = 500
+    @map[nil, "c"] = 600
+
+    @map["a"].should == [100]
+    @map["a", "c"].should == [100, 400, 600]
+    @map["b"].should == [200, 300]
+    @map["b", "c"].should == [200, 300, 400, 500, 600]
+    @map["c", "c"].should == [400, 500, 600]
+  end
 end
 
 describe FuzzyNestedMultiMap, "with inital values" do

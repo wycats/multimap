@@ -81,6 +81,12 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     a.should == [["a", 100], ["b", 200], ["b", 300]]
   end
 
+  it "should iterate over each key/container" do
+    a = []
+    @map.each_pair_list { |key, container| a << [key, container] }
+    a.should == [["a", @container.new([100])], ["b", @container.new([200, 300])]]
+  end
+
   it "should iterate over each key" do
     a = []
     @map.each_key { |key| a << key }
@@ -91,6 +97,12 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     h = {}
     @map.each_pair { |key, value| (h[key] ||= []) << value }
     h.should == { "a" => [100], "b" => [200, 300] }
+  end
+
+  it "should iterate over each container" do
+    a = []
+    @map.each_list { |container| a << container }
+    a.should == [@container.new([100]), @container.new([200, 300]), @container.new]
   end
 
   it "should iterate over each value" do
@@ -196,6 +208,10 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
   it "should convert to hash" do
     @map.to_hash.should == { "a" => @container.new([100]), "b" => @container.new([200, 300]) }
     @map.to_hash.should_not equal(@map)
+  end
+
+  it "should return all containers" do
+    @map.lists.should == [@container.new([100]), @container.new([200, 300]), @container.new]
   end
 
   it "should return all values" do

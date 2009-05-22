@@ -100,7 +100,7 @@ class MultiMap < Hash
       end
     end
     default.each do |value|
-      yield
+      yield value
     end
     self
   end

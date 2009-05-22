@@ -15,5 +15,5 @@ VALUE cNestedMultiMapExt;
 
 void Init_nested_multimap_ext() {
 	cNestedMultiMapExt = rb_define_module("NestedMultiMapExt");
-	rb_define_method(cNestedMultiMapExt, "cfetch", rb_nested_multimap_aref, -1);
+	rb_define_method(cNestedMultiMapExt, "native_aref", rb_nested_multimap_aref, -1);
 }

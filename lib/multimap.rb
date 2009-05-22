@@ -1,15 +1,39 @@
 class MultiMap < Hash
-  def self.[](*args)
-    if args.first.is_a?(Hash)
-      args[0] = args.first.inject({}) { |h, (k, v)|
-        h[k] = v.is_a?(Array) ? v : [v]
-        h
-      }
+  class << self
+    alias_method :hash_s_create, :[]
+    private :hash_s_create
+
+    def [](*args)
+      return _create([], *args)
     end
 
-    map = super
-    map.default = [].freeze
-    map
+    def _create(default = [], *args)
+      default.freeze
+
+      if args.size == 1 && args.first.is_a?(Hash)
+        args[0] = args.first.inject({}) { |hash, (key, value)|
+          unless value.is_a?(default.class)
+            value = (default.dup << value)
+          end
+          hash[key] = value
+          hash
+        }
+      else
+        index = 0
+        args.map! { |value|
+          unless index % 2 == 0 || value.is_a?(default.class)
+            value = (default.dup << value)
+          end
+          index += 1
+          value
+        }
+      end
+
+      map = hash_s_create(*args)
+      map.default = default
+      map
+    end
+    protected :_create
   end
 
   def initialize(default = [])
@@ -83,20 +107,8 @@ class MultiMap < Hash
 
   def replace(other)
     case other
-    when Hash
-      default = self.default
-      map = super(other.inject({}) { |h, (k, v)|
-        container = default.dup
-        if v.respond_to?(:each)
-          v.each { |v| container << v }
-        else
-          container << v
-        end
-        h[k] = container
-        h
-      })
-      map.default = default
-      map
+    when Array, Hash
+      super(self.class.send(:_create, self.default, other))
     when self.class
       super
     else

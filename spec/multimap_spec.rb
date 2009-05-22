@@ -3,18 +3,27 @@ require 'multimap'
 require 'spec/enumerable_examples'
 require 'spec/hash_examples'
 
-describe MultiMap, "with inital values" do
+describe MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
-    @map = MultiMap["a" => [100], "b" => [200, 300]]
+    @map = MultiMap["a" => 100, "b" => [200, 300]]
+  end
+end
+
+describe MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
+  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+
+  before do
+    @map = MultiMap["a", 100, "b", [200, 300]]
   end
 end
 
 require 'set'
 
-describe MultiMap, "with a", Set do
+describe MultiMap, "with", Set do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 
@@ -29,34 +38,43 @@ end
 
 
 class MiniArray
-  instance_methods.each { |m| undef_method m unless m =~ /^__|^object_id$/ }
+  attr_accessor :data
 
-  def initialize(ary = [])
-    @ary = ary
+  def initialize(data = [])
+    @data = data
   end
 
   def <<(value)
-    @ary << value
+    @data << value
   end
 
   def each(&block)
-    @ary.each(&block)
+    @data.each(&block)
   end
 
   def ==(other)
-    @ary == other
+    case other
+    when MiniArray
+      @data == other.data
+    when Array
+      @data == other
+    else
+      false
+    end
   end
 
-  def respond_to?(sym)
-    @ary.respond_to?(sym)
+  def to_ary
+    @data.to_ary
   end
 
-  def freeze
-    @ary.freeze
+  def dup
+    ary = super
+    ary.data = @data.dup
+    ary
   end
 end
 
-describe MultiMap, "with ", MiniArray do
+describe MultiMap, "with", MiniArray do
   it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
   it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
 

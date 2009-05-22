@@ -38,6 +38,10 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     @map.default.should be_frozen
   end
 
+  it "should be the class of the container" do
+    @map.default.class.should == @container
+  end
+
   it "should delete all values at key" do
     @map.delete("a")
     @map["a"].should == @container.new

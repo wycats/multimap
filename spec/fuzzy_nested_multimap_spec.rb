@@ -8,7 +8,32 @@ shared_examples_for "Fuzzy", MultiMap do
     @map[/^a$/] = 500
     @map["a"].should == [100, 500]
     @map["b"].should == [200, 300]
-    @map.default.should == [500]
+    @map[nil].should == [500]
+  end
+
+  it "should convert nil key to a Regexp" do
+    @map[nil] = 500
+    @map["a"].should == [100, 500]
+    @map["b"].should == [200, 300, 500]
+    @map[nil].should == [500]
+  end
+
+  it "should allow keys to be empty" do
+    keys = []
+    @map[*keys] = 500
+    @map["a"].should == [100, 500]
+    @map["b"].should == [200, 300, 500]
+    @map[nil].should == [500]
+  end
+
+  it "should allow static keys nested below Regexp" do
+    @map[nil, "c"] = 500
+    @map["a"].should == [100]
+    @map["a", "c"].should == [100, 500]
+    @map["b"].should == [200, 300]
+    @map["b", "c"].should == [200, 300, 500]
+    @map[nil].should == []
+    @map[nil, "c"].should == [500]
   end
 end
 

@@ -47,6 +47,7 @@ class MultiMap < Hash
   def store(key, value)
     update_container(key) do |container|
       container << value
+      container
     end
   end
   alias_method :[]=, :store
@@ -65,8 +66,6 @@ class MultiMap < Hash
     end
   end
 
-  alias_method :each_pair_list, :each_pair
-
   def each
     super do |key, values|
       values.each do |value|
@@ -75,6 +74,8 @@ class MultiMap < Hash
     end
   end
 
+  alias_method :each_pair_list, :each_pair
+
   def each_pair
     super do |key, values|
       values.each do |value|
@@ -82,6 +83,8 @@ class MultiMap < Hash
       end
     end
   end
+
+  alias_method :each_list, :each_value
 
   def each_value
     super do |values|
@@ -171,11 +174,14 @@ class MultiMap < Hash
     dup
   end
 
+  alias_method :lists, :values
+
   def values
-    super.inject([]) { |values, container|
-      values.push(*container)
-      values
-    }
+    values = []
+    each_pair_list do |_, container|
+      container.each { |value| values << value }
+    end
+    values
   end
 
   protected

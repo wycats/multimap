@@ -33,4 +33,32 @@ describe NestedMultiMap, "with inital values" do
     @map["x"] = 100
     @map["x"].should == [300, 100]
   end
+
+  it "should list all containers" do
+    @map.lists.should == [[100], [200, 300], []]
+  end
+end
+
+describe NestedMultiMap, "with nested values" do
+  before do
+    @map = NestedMultiMap.new
+    @map["a"] = 100
+    @map["b"] = 200
+    @map["b", "c"] = 300
+    @map["c", "e"] = 400
+    @map["c"] = 500
+  end
+
+  it "should retrieve container of values for key" do
+    @map["a"].should == [100]
+    @map["b"].should == [200]
+    @map["c"].should == [500]
+    @map["a", "b"].should == [100]
+    @map["b", "c"].should == [200, 300]
+    @map["c", "e"].should == [400, 500]
+  end
+
+  it "should list all containers" do
+    @map.lists.should == [[100], [200, 300], [200], [400, 500], [500], []]
+  end
 end

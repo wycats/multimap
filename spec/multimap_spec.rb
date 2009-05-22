@@ -52,6 +52,10 @@ class MiniArray
     @data.each(&block)
   end
 
+  def delete(value)
+    @data.delete(value)
+  end
+
   def ==(other)
     case other
     when MiniArray

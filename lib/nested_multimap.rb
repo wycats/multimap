@@ -21,23 +21,44 @@ class NestedMultiMap < MultiMap
   alias_method :[]=, :store
 
   def <<(value)
-    each_pair_list { |key, container| container.push(value) }
+    each_pair_list { |key, container| container << value }
     append_to_default_container!(value)
     nil
   end
 
   def [](*keys)
     result, i = self, 0
-    until result.is_a?(default.class)
+    while result.is_a?(self.class)
       result = result.hash_aref(keys[i])
       i += 1
     end
     result
   end
 
+  def lists
+    descendants = []
+    each_list_with_default do |container|
+      if container.respond_to?(:lists)
+        container.lists.each do |descendant|
+          descendants << descendant
+        end
+      else
+        descendants << container
+      end
+    end
+    descendants
+  end
+
   private
+    def each_list_with_default
+      each_pair_list { |_, container| yield container }
+      yield default
+      nil
+    end
+
     def append_to_default_container!(value)
-      self.default = self.default.dup.push(value)
+      self.default = self.default.dup
+      self.default << value
       self.default.freeze
     end
 end

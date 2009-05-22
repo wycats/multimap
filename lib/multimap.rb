@@ -185,9 +185,6 @@ class MultiMap < Hash
     dup
   end
 
-  alias_method :hash_values, :values
-  protected :hash_values
-
   def lists
     lists = []
     each_list { |container| lists << container }

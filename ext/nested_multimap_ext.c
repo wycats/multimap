@@ -11,9 +11,7 @@ static VALUE rb_nested_multimap_aref(int argc, VALUE *argv, VALUE self)
 	return r;
 }
 
-VALUE cNestedMultiMapExt;
-
 void Init_nested_multimap_ext() {
-	cNestedMultiMapExt = rb_define_module("NestedMultiMapExt");
-	rb_define_method(cNestedMultiMapExt, "native_aref", rb_nested_multimap_aref, -1);
+	VALUE cNestedMultiMap = rb_const_get(rb_cObject, rb_intern("NestedMultiMap"));
+	rb_define_method(cNestedMultiMap, "[]", rb_nested_multimap_aref, -1);
 }

@@ -44,10 +44,5 @@ end
 
 begin
   require 'nested_multimap_ext'
-
-  class NestedMultiMap < MultiMap
-    include NestedMultiMapExt
-    alias_method :[], :native_aref
-  end
 rescue LoadError
 end

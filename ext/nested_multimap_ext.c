@@ -3,9 +3,9 @@
 static VALUE rb_nested_multimap_aref(int argc, VALUE *argv, VALUE self)
 {
 	int i;
-	VALUE r;
+	VALUE r, k;
 
-	for (i = 0, r = self; TYPE(r) != T_ARRAY; i++)
+	for (i = 0, r = self, k = TYPE(self); TYPE(r) == k; i++)
 		r = rb_hash_aref(r, (i < argc) ? argv[i] : Qnil);
 
 	return r;

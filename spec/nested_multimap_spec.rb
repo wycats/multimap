@@ -121,3 +121,19 @@ describe NestedMultiMap, "with nested values" do
     @map.values.should == [100, 200, 300, 400, 500]
   end
 end
+
+
+require 'set'
+
+describe NestedMultiMap, "with", Set do
+  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+
+  before do
+    @container = Set
+    @map = NestedMultiMap.new(@container.new)
+    @map["a"] = 100
+    @map["b"] = 200
+    @map["b"] = 300
+  end
+end

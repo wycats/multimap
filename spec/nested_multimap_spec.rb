@@ -74,31 +74,49 @@ describe NestedMultiMap, "with nested values" do
   end
 
   it "should iterate over each key/value pair and yield an array" do
-    pending "not sure what the correct behavior should be"
     a = []
     @map.each { |pair| a << pair }
-    a.should == "?"
+    a.should == [
+      ["a", 100],
+      [["b", "c"], 200],
+      [["b", "c"], 300],
+      ["b", 200],
+      ["b", 300],
+      [["c", "e"], 400],
+      [["c", "e"], 500],
+      ["c", 400],
+      ["c", 500]
+    ]
   end
 
   it "should iterate over each key/container" do
-    pending "not sure what the correct behavior should be"
     a = []
     @map.each_pair_list { |key, container| a << [key, container] }
-    a.should == "?"
+    a.should == [
+      ["a", [100]],
+      [["b", "c"], [200, 300]],
+      ["b", [200, 300]],
+      [["c", "e"], [400, 500]],
+      ["c", [400, 500]]
+    ]
   end
 
   it "should iterate over each key" do
-    pending "not sure what the correct behavior should be"
     a = []
     @map.each_key { |key| a << key }
-    a.should == "?"
+    a.should == ["a", ["b", "c"], "b", ["c", "e"], "c"]
   end
 
   it "should iterate over each key/value pair and yield the pair" do
-    pending "not sure what the correct behavior should be"
     h = {}
     @map.each_pair { |key, value| (h[key] ||= []) << value }
-    h.should == "?"
+    h.should == {
+      "a" => [100],
+      "b" => [200, 300],
+      "c" => [400, 500],
+      ["c", "e"] => [400, 500],
+      ["b", "c"] => [200, 300]
+    }
   end
 
   it "should iterate over each container" do
@@ -110,7 +128,7 @@ describe NestedMultiMap, "with nested values" do
   it "should iterate over each value" do
     a = []
     @map.each_value { |value| a << value }
-    a.should == [100, 200, 300, 400, 500]
+    a.should == [100, 200, 300, 200, 300, 400, 500, 400, 500]
   end
 
   it "should list all containers" do
@@ -118,7 +136,7 @@ describe NestedMultiMap, "with nested values" do
   end
 
   it "should list all values" do
-    @map.values.should == [100, 200, 300, 400, 500]
+    @map.values.should == [100, 200, 300, 200, 300, 400, 500, 400, 500]
   end
 end
 

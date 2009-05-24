@@ -72,10 +72,16 @@ class MultiMap < Hash
     end
   end
 
+  def each_key
+    each_pair_list do |key, values|
+      yield key
+    end
+  end
+
   alias_method :each_pair_list, :each_pair
 
   def each_pair
-    super do |key, values|
+    each_pair_list do |key, values|
       values.each do |value|
         yield key, value
       end
@@ -85,9 +91,11 @@ class MultiMap < Hash
   alias_method :hash_each_value, :each_value
   protected :hash_each_value
 
-  def each_list(&block)
-    hash_each_value(&block)
-    block.call(default)
+  def each_list
+    hash_each_value do |value|
+      yield value
+    end
+    yield default
     self
   end
 

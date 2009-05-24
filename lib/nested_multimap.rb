@@ -35,29 +35,27 @@ class NestedMultiMap < MultiMap
     result
   end
 
-  def each_list(&block)
-    super do |container|
-      if container.respond_to?(:lists)
-        container.lists.each do |value|
-          block.call(value)
+  def each_pair_list
+    super do |key, container|
+      if container.respond_to?(:each_pair_list)
+        container.each_pair_list do |nested_key, container|
+          yield [key, nested_key].flatten, container
         end
-      else
-        block.call(container)
       end
+      yield key, container
     end
   end
 
-  def each_value(&block)
-    values = []
-    lists.each do |container|
-      container.each do |value|
-        unless values.include?(value)
-          values << value
-          block.call(value)
+  def each_list
+    super do |container|
+      if container.respond_to?(:each_list)
+        container.each_list do |value|
+          yield value
         end
+      else
+        yield container
       end
     end
-    self
   end
 
   private

@@ -28,6 +28,7 @@ begin
 
   Rake::ExtensionTask.new do |ext|
     ext.name = 'nested_multimap_ext'
+    ext.gem_spec = $spec
   end
 rescue Gem::LoadError
 end

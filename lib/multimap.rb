@@ -67,10 +67,8 @@ class MultiMap < Hash
   end
 
   def each
-    super do |key, values|
-      values.each do |value|
-        yield [key, value]
-      end
+    each_pair do |key, value|
+      yield [key, value]
     end
   end
 
@@ -94,15 +92,9 @@ class MultiMap < Hash
   end
 
   def each_value
-    super do |values|
-      values.each do |value|
-        yield value
-      end
-    end
-    default.each do |value|
+    each_pair do |key, value|
       yield value
     end
-    self
   end
 
   def freeze

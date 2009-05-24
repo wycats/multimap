@@ -38,11 +38,12 @@ class NestedMultiMap < MultiMap
   def each_pair_list
     super do |key, container|
       if container.respond_to?(:each_pair_list)
-        container.each_pair_list do |nested_key, container|
-          yield [key, nested_key].flatten, container
+        container.each_pair_list do |nested_key, value|
+          yield [key, nested_key].flatten, value
         end
+      else
+        yield key, container
       end
-      yield key, container
     end
   end
 

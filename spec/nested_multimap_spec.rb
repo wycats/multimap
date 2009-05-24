@@ -80,12 +80,8 @@ describe NestedMultiMap, "with nested values" do
       ["a", 100],
       [["b", "c"], 200],
       [["b", "c"], 300],
-      ["b", 200],
-      ["b", 300],
       [["c", "e"], 400],
-      [["c", "e"], 500],
-      ["c", 400],
-      ["c", 500]
+      [["c", "e"], 500]
     ]
   end
 
@@ -95,16 +91,14 @@ describe NestedMultiMap, "with nested values" do
     a.should == [
       ["a", [100]],
       [["b", "c"], [200, 300]],
-      ["b", [200, 300]],
-      [["c", "e"], [400, 500]],
-      ["c", [400, 500]]
+      [["c", "e"], [400, 500]]
     ]
   end
 
   it "should iterate over each key" do
     a = []
     @map.each_key { |key| a << key }
-    a.should == ["a", ["b", "c"], "b", ["c", "e"], "c"]
+    a.should == ["a", ["b", "c"], ["c", "e"]]
   end
 
   it "should iterate over each key/value pair and yield the pair" do
@@ -112,8 +106,6 @@ describe NestedMultiMap, "with nested values" do
     @map.each_pair { |key, value| (h[key] ||= []) << value }
     h.should == {
       "a" => [100],
-      "b" => [200, 300],
-      "c" => [400, 500],
       ["c", "e"] => [400, 500],
       ["b", "c"] => [200, 300]
     }
@@ -128,7 +120,7 @@ describe NestedMultiMap, "with nested values" do
   it "should iterate over each value" do
     a = []
     @map.each_value { |value| a << value }
-    a.should == [100, 200, 300, 200, 300, 400, 500, 400, 500]
+    a.should == [100, 200, 300, 400, 500]
   end
 
   it "should list all containers" do
@@ -136,7 +128,7 @@ describe NestedMultiMap, "with nested values" do
   end
 
   it "should list all values" do
-    @map.values.should == [100, 200, 300, 200, 300, 400, 500, 400, 500]
+    @map.values.should == [100, 200, 300, 400, 500]
   end
 end
 

@@ -44,6 +44,10 @@ class MiniArray
     @data = data
   end
 
+  def initialize_copy(orig)
+    @data = orig.data.dup
+  end
+
   def <<(value)
     @data << value
   end
@@ -54,12 +58,6 @@ class MiniArray
 
   def delete(value)
     @data.delete(value)
-  end
-
-  def dup
-    ary = super
-    ary.data = @data.dup
-    ary
   end
 
   def ==(other)

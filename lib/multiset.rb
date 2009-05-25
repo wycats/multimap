@@ -28,9 +28,9 @@ class Multiset < Set
   #   self
   # end
 
-  # def to_a
-  #   @hash.keys
-  # end
+  def to_a
+    inject([]) { |ary, (key, _)| ary << key }
+  end
 
   # def superset?(set)
   #   set.is_a?(Set) or raise ArgumentError, "value must be a set"
@@ -128,6 +128,9 @@ class Multiset < Set
 
   def ==(set)
     return true if equal?(set)
+
+    set = self.class.new(set) unless set.is_a?(self.class)
+
     return false unless cardinality == set.cardinality
 
     @hash.each_pair do |element, multiplicity|

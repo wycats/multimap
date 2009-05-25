@@ -1,3 +1,5 @@
+require 'multiset'
+
 class Multimap < Hash
   class << self
     alias_method :hash_s_create, :[]
@@ -143,7 +145,7 @@ class Multimap < Hash
   protected :hash_keys
 
   def keys
-    keys = []
+    keys = Multiset.new
     each_key { |key| keys << key }
     keys
   end

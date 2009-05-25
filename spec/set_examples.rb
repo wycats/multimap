@@ -88,7 +88,7 @@ shared_examples_for Set do
     set = Multiset[1, 2, 3, 2]
     ary = set.to_a
 
-    ary.sort.should == [1, 2, 3]
+    ary.sort.should == [1, 2, 2, 3]
   end
 
   it "should return true if the set contains the given object" do

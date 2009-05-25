@@ -22,6 +22,13 @@ Spec::Rake::SpecTask.new do |t|
   t.spec_opts = ["-c", "-fs"]
 end
 
+Spec::Rake::SpecTask.new('spec:rcov') do |t|
+  t.libs << "lib"
+  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.rcov = true
+  t.rcov_opts = ['--exclude', 'spec']
+end
+
 begin
   gem 'rake-compiler'
   require 'rake/extensiontask'

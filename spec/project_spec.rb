@@ -9,8 +9,6 @@ describe "MultiMap project" do
   it "should have a folder of sample benchmark"
   it "should be really fucking fast"
 
-  it "should have a MultiSet implementation"
-
   it "should release a gem on GitHub"
   it "should bundle native code in gem"
   it "should have a RubyForge project"

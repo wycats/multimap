@@ -12,6 +12,16 @@ Rake::GemPackageTask.new($spec) do |package|
   package.gem_spec = $spec
 end
 
+desc 'Publish gem to RubyForge'
+task :release => [ :package ] do
+  group_id     = $spec.rubyforge_project
+  package_id   = $spec.name
+  release_name = $spec.version
+  userfile     = File.expand_path("pkg/#{$spec.name}-#{$spec.version}.gem")
+
+  sh "rubyforge add_release #{group_id} #{package_id} #{release_name} #{userfile}"
+end
+
 task :default => :spec
 
 require 'spec/rake/spectask'

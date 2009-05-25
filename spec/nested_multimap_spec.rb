@@ -16,6 +16,16 @@ describe NestedMultiMap, "with inital values" do
     @map["foo", "bar", "baz"].should == [100]
   end
 
+  it "should allow nil keys to be set" do
+    @map["b", nil] = 400
+    @map["b", "c"] = 500
+
+    @map["a"].should == [100]
+    @map["b"].should == [200, 300]
+    @map["b", nil].should == [200, 300, 400]
+    @map["b", "c"].should == [200, 300, 500]
+  end
+
   it "should append the value to default containers" do
     @map << 300
     @map[nil].should == [300]

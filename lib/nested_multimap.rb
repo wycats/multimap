@@ -8,14 +8,14 @@ class NestedMultiMap < MultiMap
 
     raise ArgumentError, 'wrong number of arguments (1 for 2)' unless value
 
-    if keys.empty?
-      super(key, value)
-    else
+    if keys.length > 0
       update_container(key) do |container|
         container = self.class.new(container) if container.is_a?(default.class)
         container[*keys] = value
         container
       end
+    else
+      super(key, value)
     end
   end
   alias_method :[]=, :store
@@ -27,12 +27,12 @@ class NestedMultiMap < MultiMap
   end
 
   def [](*keys)
-    result, i = self, 0
-    while result.is_a?(self.class)
-      result = result.hash_aref(keys[i])
+    i, l, r, k = 0, keys.length, self, self.class
+    while r.is_a?(k)
+      r = i < l ? r.hash_aref(keys[i]) : r.default
       i += 1
     end
-    result
+    r
   end
 
   def each_pair_list

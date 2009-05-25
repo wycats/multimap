@@ -59,6 +59,10 @@ class NestedMultiMap < MultiMap
     end
   end
 
+  def inspect
+    super.gsub(/\}$/, ", nil => #{default.inspect}}")
+  end
+
   private
     def append_to_default_container!(value)
       self.default = self.default.dup

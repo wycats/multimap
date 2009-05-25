@@ -4,6 +4,14 @@ class Multiset < Set
   attr_reader :hash
   protected :hash
 
+  def multiplicity(e)
+    @hash[e]
+  end
+
+  def cardinality
+    @hash.inject(0) { |s, (e, m)| s += m }
+  end
+
   # def size
   #   @hash.size
   # end
@@ -49,8 +57,8 @@ class Multiset < Set
   # end
 
   def each
-    @hash.each_pair do |key, memberships|
-      memberships.times do
+    @hash.each_pair do |key, multiplicity|
+      multiplicity.times do
         yield(key)
       end
     end
@@ -118,17 +126,20 @@ class Multiset < Set
   #   n
   # end
 
-  # def ==(set)
-  #   equal?(set) and return true
-  # 
-  #   set.is_a?(Set) && size == set.size or return false
-  # 
-  #   hash = @hash.dup
-  #   set.all? { |o| hash.include?(o) }
-  # end
+  def ==(set)
+    return true if equal?(set)
+    return false unless cardinality == set.cardinality
 
-  # def eql?(o)
-  #   return false unless o.is_a?(self.class)
-  #   @hash.eql?(o.hash)
-  # end
+    @hash.each_pair do |element, multiplicity|
+      unless multiplicity == set.multiplicity(element)
+        return false
+      end
+    end
+
+    true
+  end
+
+  def eql?(obj)
+    obj.is_a?(self.class) && self == obj
+  end
 end

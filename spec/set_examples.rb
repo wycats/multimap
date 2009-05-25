@@ -10,7 +10,10 @@ shared_examples_for Set do
     Multiset[[nil]].size.should == 1
 
     set = Multiset[2, 4, 6, 4]
-    Multiset.new([2, 4, 6]).should == set
+    Multiset.new([2, 4, 6]).should_not == set
+
+    set = Multiset[2, 4, 6, 4]
+    Multiset.new([2, 4, 6, 4]).should == set
   end
 
   it "should create a new set containing the elements of the given enumerable object" do
@@ -173,11 +176,11 @@ shared_examples_for Set do
 
     ret = set.add(2)
     set.should equal(ret)
-    set.should == Multiset[1, 2, 3]
+    set.should == Multiset[1, 2, 2, 3]
 
     ret = set.add(4)
     set.should equal(ret)
-    set.should == Multiset[1, 2, 3, 4]
+    set.should == Multiset[1, 2, 2, 3, 4]
   end
 
   it "should delete the given object from the set and return self" do
@@ -221,7 +224,7 @@ shared_examples_for Set do
 
     ret = set.merge([2, 4, 6])
     set.should equal(ret)
-    set.should == Multiset[1, 2, 3, 4, 6]
+    set.should == Multiset[1, 2, 2, 3, 4, 6]
   end
 
   it "should delete every element that appears in the given enumerable object and return self" do
@@ -237,7 +240,7 @@ shared_examples_for Set do
 
     ret = set + [2, 4, 6]
     set.should_not equal(ret)
-    ret.should == Multiset[1, 2, 3, 4, 6]
+    ret.should == Multiset[1, 2, 2, 3, 4, 6]
   end
 
   it "should return a new set built by duplicating the set, removing every element that appears in the given enumerable object" do

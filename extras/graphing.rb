@@ -35,7 +35,7 @@ end
 class MultiMap < Hash
   def to_graph_label
     "#{hash_keys.map { |e|
-      "<#{e.to_graph_node}> #{e.to_s}"
+      "<#{e.to_graph_node}> #{e.to_graph_label}"
     }.join('|')}|<default>"
   end
 

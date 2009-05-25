@@ -139,6 +139,9 @@ class MultiMap < Hash
     h
   end
 
+  alias_method :hash_keys, :keys
+  protected :hash_keys
+
   def keys
     keys = []
     each_key { |key| keys << key }

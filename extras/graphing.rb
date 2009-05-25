@@ -3,56 +3,58 @@ require 'rubygems'
 gem 'ruby-graphviz'
 require 'graphviz'
 
-class GraphViz
-  ESCAPE = %w( \\ < > { } " " )
-  ESCAPE_REGEXP = Regexp.compile("(#{Regexp.union(*ESCAPE).source})")
-
-  def self.escape(str)
-    str.to_str.gsub(ESCAPE_REGEXP) {|s| "\\#{s}" }
+class Object
+  def to_graph_node
+    "node#{object_id}"
   end
 
-  def self.to_node(obj)
-    "node#{obj.object_id}"
+  def to_graph_label
+    inspect.dot_escape
   end
 
-  def self.to_label(obj)
-    case obj
-    when Array
-      "{#{obj.map { |e| to_label(e) }.join('|')}}"
-    when Hash
-      "#{obj.keys.map { |e|
-        "<#{to_node(e)}> #{e.to_s}"
-      }.join('|')}|<default>"
-    else
-      escape(obj.inspect)
-    end
+  def add_to_graph(graph)
+    graph.add_node(to_graph_node, :label => to_graph_label)
   end
+end
 
-  def add_object(obj, options = {})
-    options.merge!(:label => self.class.to_label(obj))
+class Array
+  def to_graph_label
+    "{#{map { |e| e.to_graph_label }.join('|')}}"
+  end
+end
 
-    case obj
-    when MultiMap
-      hash_node = add_node(self.class.to_node(obj), options)
+class String
+  DOT_ESCAPE = %w( \\ < > { } " " )
+  DOT_ESCAPE_REGEXP = Regexp.compile("(#{Regexp.union(*DOT_ESCAPE).source})")
 
-      obj.each_pair_list do |key, container|
-        node = add_object(container)
-        add_edge("#{hash_node.name}:#{self.class.to_node(key)}", node)
-      end
-
-      unless obj.default.nil?
-        node = add_object(obj.default)
-        add_edge("#{hash_node.name}:default", node)
-      end
-
-      hash_node
-    else
-      add_node(self.class.to_node(obj), options)
-    end
+  def dot_escape
+    gsub(DOT_ESCAPE_REGEXP) {|s| "\\#{s}" }
   end
 end
 
 class MultiMap < Hash
+  def to_graph_label
+    "#{hash_keys.map { |e|
+      "<#{e.to_graph_node}> #{e.to_s}"
+    }.join('|')}|<default>"
+  end
+
+  def add_to_graph(graph)
+    hash_node = super
+
+    hash_each_pair do |key, container|
+      node = container.add_to_graph(graph)
+      graph.add_edge("#{hash_node.name}:#{key.to_graph_node}", node)
+    end
+
+    unless default.nil?
+      node = default.add_to_graph(graph)
+      graph.add_edge("#{hash_node.name}:default", node)
+    end
+
+    hash_node
+  end
+
   def to_graph
     g = GraphViz::new('G')
     g[:nodesep] = '.05'
@@ -62,7 +64,7 @@ class MultiMap < Hash
     g.node[:width] = '.1'
     g.node[:height] = '.1'
 
-    g.add_object(self)
+    add_to_graph(g)
 
     g
   end

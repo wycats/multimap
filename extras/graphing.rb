@@ -32,7 +32,7 @@ class String
   end
 end
 
-class MultiMap < Hash
+class Multimap < Hash
   def to_graph_label
     "#{hash_keys.map { |e|
       "<#{e.to_graph_node}> #{e.to_graph_label}"
@@ -79,6 +79,6 @@ if __FILE__ == $0
   $: << 'lib'
   require 'multimap'
 
-  map = MultiMap['a' => 100, 'b' => [200, 300]]
+  map = Multimap['a' => 100, 'b' => [200, 300]]
   map.open_graph!
 end

@@ -3,33 +3,33 @@ require 'multimap'
 require 'spec/enumerable_examples'
 require 'spec/hash_examples'
 
-describe MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
-  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+describe Multimap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
+  it_should_behave_like "Enumerable Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
-    @map = MultiMap["a" => 100, "b" => [200, 300]]
+    @map = Multimap["a" => 100, "b" => [200, 300]]
   end
 end
 
-describe MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
-  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+describe Multimap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
+  it_should_behave_like "Enumerable Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
-    @map = MultiMap["a", 100, "b", [200, 300]]
+    @map = Multimap["a", 100, "b", [200, 300]]
   end
 end
 
 require 'set'
 
-describe MultiMap, "with", Set do
-  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+describe Multimap, "with", Set do
+  it_should_behave_like "Enumerable Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
     @container = Set
-    @map = MultiMap.new(@container.new)
+    @map = Multimap.new(@container.new)
     @map["a"] = 100
     @map["b"] = 200
     @map["b"] = 300
@@ -67,13 +67,13 @@ class MiniArray
   end
 end
 
-describe MultiMap, "with", MiniArray do
-  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+describe Multimap, "with", MiniArray do
+  it_should_behave_like "Enumerable Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
     @container = MiniArray
-    @map = MultiMap.new(@container.new)
+    @map = Multimap.new(@container.new)
     @map["a"] = 100
     @map["b"] = 200
     @map["b"] = 300

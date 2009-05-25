@@ -1,18 +1,18 @@
-shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
+shared_examples_for Hash, Multimap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
   before do
     @container ||= Array
   end
 
-  it "should be equal to another MultiMap if they contain the same keys and values" do
-    map2 = MultiMap.new(@container.new)
+  it "should be equal to another Multimap if they contain the same keys and values" do
+    map2 = Multimap.new(@container.new)
     map2["a"] = 100
     map2["b"] = 200
     map2["b"] = 300
     @map.should == map2
   end
 
-  it "should not be equal to another MultiMap if they contain different values" do
-    @map.should_not == MultiMap["a" => [100], "b" => [200]]
+  it "should not be equal to another Multimap if they contain different values" do
+    @map.should_not == Multimap["a" => [100], "b" => [200]]
   end
 
   it "should retrieve container of values for key" do
@@ -151,8 +151,8 @@ shared_examples_for Hash, MultiMap, "with inital values {'a' => [100], 'b' => [2
     @map["c"].should == @container.new([300])
   end
 
-  it "should return an inverted MultiMap" do
-    map2 = MultiMap.new(@container.new)
+  it "should return an inverted Multimap" do
+    map2 = Multimap.new(@container.new)
     map2[100] = "a"
     map2[200] = "b"
     map2[300] = "b"

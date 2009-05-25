@@ -3,12 +3,12 @@ require 'nested_multimap'
 require 'spec/enumerable_examples'
 require 'spec/hash_examples'
 
-describe NestedMultiMap, "with inital values" do
-  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+describe NestedMultimap, "with inital values" do
+  it_should_behave_like "Enumerable Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
-    @map = NestedMultiMap["a" => [100], "b" => [200, 300]]
+    @map = NestedMultimap["a" => [100], "b" => [200, 300]]
   end
 
   it "should set value at nested key" do
@@ -53,9 +53,9 @@ describe NestedMultiMap, "with inital values" do
   end
 end
 
-describe NestedMultiMap, "with nested values" do
+describe NestedMultimap, "with nested values" do
   before do
-    @map = NestedMultiMap.new
+    @map = NestedMultimap.new
     @map["a"] = 100
     @map["b"] = 200
     @map["b", "c"] = 300
@@ -149,13 +149,13 @@ end
 
 require 'set'
 
-describe NestedMultiMap, "with", Set do
-  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
+describe NestedMultimap, "with", Set do
+  it_should_behave_like "Enumerable Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
 
   before do
     @container = Set
-    @map = NestedMultiMap.new(@container.new)
+    @map = NestedMultimap.new(@container.new)
     @map["a"] = 100
     @map["b"] = 200
     @map["b"] = 300

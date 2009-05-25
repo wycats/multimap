@@ -3,7 +3,7 @@ require 'nested_multimap'
 
 hash = { "a" => true }
 
-map = NestedMultiMap.new
+map = NestedMultimap.new
 map["a"] = 100
 map["a", "b", "c"] = 200
 map["a", "b", "c", "d", "e", "f"] = 300

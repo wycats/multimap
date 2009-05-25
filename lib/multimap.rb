@@ -1,4 +1,4 @@
-class MultiMap < Hash
+class Multimap < Hash
   class << self
     alias_method :hash_s_create, :[]
     private :hash_s_create
@@ -134,7 +134,7 @@ class MultiMap < Hash
   end
 
   def invert
-    h = MultiMap.new(default.dup)
+    h = Multimap.new(default.dup)
     each_pair { |key, value| h[value] = key }
     h
   end

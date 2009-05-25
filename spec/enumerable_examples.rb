@@ -1,4 +1,4 @@
-shared_examples_for Enumerable, MultiMap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
+shared_examples_for Enumerable, Multimap, "with inital values {'a' => [100], 'b' => [200, 300]}" do
   it "should check all key/value pairs for condition" do
     @map.all? { |key, value| key =~ /\w/ }.should be_true
     @map.all? { |key, value| key =~ /\d/ }.should be_false

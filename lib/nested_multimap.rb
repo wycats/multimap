@@ -1,6 +1,6 @@
 require 'multimap'
 
-class NestedMultiMap < MultiMap
+class NestedMultimap < Multimap
   def store(*args)
     value = args.pop
     key   = args.shift

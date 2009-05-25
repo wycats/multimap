@@ -1,7 +1,7 @@
-describe "MultiMap project" do
-  it "should have all MultiMap methods documented"
-  it "should have all NestedMultiMap methods documented"
-  it "should have all FuzzyNestedMultiMap methods documented"
+describe "Multimap project" do
+  it "should have all Multimap methods documented"
+  it "should have all NestedMultimap methods documented"
+  it "should have all FuzzyNestedMultimap methods documented"
   it "should have a published RDoc page"
 
   it "should have 100% test coverage"

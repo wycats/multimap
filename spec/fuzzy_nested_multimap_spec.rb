@@ -3,7 +3,7 @@ require 'fuzzy_nested_multimap'
 require 'spec/enumerable_examples'
 require 'spec/hash_examples'
 
-shared_examples_for "Fuzzy", MultiMap do
+shared_examples_for "Fuzzy", Multimap do
   it "should add value to containers that match regexp key" do
     @map[/^a$/] = 500
     @map["a"].should == [100, 500]
@@ -51,13 +51,13 @@ shared_examples_for "Fuzzy", MultiMap do
   end
 end
 
-describe FuzzyNestedMultiMap, "with inital values" do
-  it_should_behave_like "Enumerable MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Hash MultiMap with inital values {'a' => [100], 'b' => [200, 300]}"
-  it_should_behave_like "Fuzzy MultiMap"
+describe FuzzyNestedMultimap, "with inital values" do
+  it_should_behave_like "Enumerable Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Hash Multimap with inital values {'a' => [100], 'b' => [200, 300]}"
+  it_should_behave_like "Fuzzy Multimap"
 
   before do
-    @map = FuzzyNestedMultiMap["a" => [100], "b" => [200, 300]]
+    @map = FuzzyNestedMultimap["a" => [100], "b" => [200, 300]]
   end
 
   it "should append the value to all containers" do

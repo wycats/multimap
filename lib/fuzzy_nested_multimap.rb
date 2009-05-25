@@ -1,6 +1,6 @@
 require 'nested_multimap'
 
-class FuzzyNestedMultiMap < NestedMultiMap
+class FuzzyNestedMultimap < NestedMultimap
   WILD_REGEXP = /.*/.freeze
 
   def []=(*args)

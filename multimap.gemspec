@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.date     = '2009-05-20'
   s.summary  = 'Ruby implementation of multimap'
   s.description = <<-EOS
-    MultiMap includes a standard Ruby multimap implementation as well
+    Multimap includes a standard Ruby multimap implementation as well
     as a nested multimap and a fuzzy nested multimap
   EOS
   s.email    = 'josh@joshpeek.com'

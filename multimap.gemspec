@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.files    = [
     "lib/fuzzy_nested_multimap.rb",
     "lib/multimap.rb",
+    "lib/multiset.rb",
     "lib/nested_multimap.rb"
   ]
   s.extra_rdoc_files = %w[README.rdoc MIT-LICENSE]

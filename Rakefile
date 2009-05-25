@@ -47,5 +47,8 @@ begin
     ext.name = 'nested_multimap_ext'
     ext.gem_spec = $spec
   end
+
+  desc "Run specs using C ext"
+  task "spec:ext" => [:compile, :spec, :clobber]
 rescue Gem::LoadError
 end

@@ -11,6 +11,5 @@ describe "MultiMap project" do
 
   it "should release a gem on GitHub"
   it "should bundle native code in gem"
-  it "should have a RubyForge project"
   it "should release a gem on RubyForge"
 end

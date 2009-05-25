@@ -78,6 +78,9 @@ class MultiMap < Hash
     end
   end
 
+  alias_method :hash_each_pair, :each_pair
+  protected :hash_each_pair
+
   alias_method :each_pair_list, :each_pair
 
   def each_pair
@@ -134,6 +137,12 @@ class MultiMap < Hash
     h = MultiMap.new(default.dup)
     each_pair { |key, value| h[value] = key }
     h
+  end
+
+  def keys
+    keys = []
+    each_key { |key| keys << key }
+    keys
   end
 
   def size

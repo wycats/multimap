@@ -127,6 +127,10 @@ describe NestedMultiMap, "with nested values" do
     @map.lists.should == [[100], [200, 300], [200], [400, 500], [500], []]
   end
 
+  it "should return array of keys" do
+    @map.keys.should == ["a", ["b", "c"], ["c", "e"]]
+  end
+
   it "should list all values" do
     @map.values.should == [100, 200, 300, 400, 500]
   end

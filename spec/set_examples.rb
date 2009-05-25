@@ -36,7 +36,7 @@ shared_examples_for Set do
     set = Multiset.new(ary)
     ary.clear
     set.should_not be_empty
-    set.size.should == 3
+    set.size.should == 4
 
     ary = [1, 2, 3]
 
@@ -60,7 +60,7 @@ shared_examples_for Set do
   it "should return the number of elements" do
     Multiset[].size.should == 0
     Multiset[1, 2].size.should == 2
-    Multiset[1, 2, 1].size.should == 2
+    Multiset[1, 2, 1].size.should == 3
   end
 
   it "should return true if the set contains no elements" do

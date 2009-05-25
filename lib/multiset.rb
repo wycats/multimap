@@ -11,11 +11,8 @@ class Multiset < Set
   def cardinality
     @hash.inject(0) { |s, (e, m)| s += m }
   end
-
-  # def size
-  #   @hash.size
-  # end
-  # alias length size
+  alias_method :size, :cardinality
+  alias_method :length, :cardinality
 
   # def replace(enum)
   #   if enum.class == self.class

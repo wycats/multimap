@@ -30,7 +30,7 @@ shared_examples_for Enumerable, Multimap, "with inital values {'a' => [100], 'b'
 
   it "should find all key/value pairs" do
     @map.find_all { |key, value| value >= 200 }.should == [["b", 200], ["b", 300]]
-    @map.select { |key, value| value >= 200 }.should == [["b", 200], ["b", 300]]
+    @map.select { |key, value| value >= 200 }.should == Multimap["b", [200, 300]] 
   end
 
   it "should combine key/value pairs with inject" do

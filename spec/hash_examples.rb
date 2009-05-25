@@ -201,8 +201,8 @@ shared_examples_for Hash, Multimap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "should select key/value pairs" do
-    @map.select { |k, v| k > "a" }.should == [["b", 200], ["b", 300]]
-    @map.select { |k, v| v < 200 }.should == [["a", 100]]
+    @map.select { |k, v| k > "a" }.should == Multimap["b", [200, 300]]
+    @map.select { |k, v| v < 200 }.should == Multimap["a", 100]
   end
 
   it "should convert to hash" do

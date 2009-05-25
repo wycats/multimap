@@ -179,9 +179,9 @@ class Multimap < Hash
   alias_method :merge!, :update
 
   def select
-    inject([]) { |result, pair|
-      result << pair if yield(pair)
-      result
+    inject(self.class.new) { |map, (key, value)|
+      map[key] = value if yield([key, value])
+      map
     }
   end
 

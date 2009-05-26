@@ -107,6 +107,18 @@ describe Multiset do
     set.should == ret
     set.should == Multiset[1, 2, 3]
   end
+
+  it "should merge the elements of the given enumerable object to the set and return self" do
+    set = Multiset[1, 2, 3]
+    ret = set.merge([2, 4, 5])
+    set.should equal(ret)
+    set.should == Multiset[1, 2, 2, 3, 4, 5]
+
+    set = Multiset[1, 2, 3]
+    ret = set.merge(Multiset[2, 4, 5])
+    set.should equal(ret)
+    set.should == Multiset[1, 2, 2, 3, 4, 5]
+  end
 end
 
 describe Multiset, "with inital values" do

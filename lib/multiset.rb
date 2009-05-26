@@ -104,17 +104,12 @@ class Multiset < Set
     self
   end
 
-  #--
-  # def merge(enum)
-  #   if enum.instance_of?(self.class)
-  #     @hash.update(enum.hash)
-  #   else
-  #     enum.each { |o| add(o) }
-  #   end
-  # 
-  #   self
-  # end
-  #++
+  # Merges the elements of the given enumerable object to the set and
+  # returns self.
+  def merge(enum)
+    enum.each { |o| add(o) }
+    self
+  end
 
   #--
   # def subtract(enum)

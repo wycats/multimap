@@ -17,7 +17,10 @@ class FuzzyNestedMultimap < NestedMultimap
         append_to_default_container!(value)
       else
         hash_keys.each { |k|
-          update_nested_container!(k, keys, value) if key =~ k
+          if key =~ k
+            args[0] = k
+            super(*args)
+          end
         }
 
         self.default = self.class.new(default) unless default.is_a?(self.class)

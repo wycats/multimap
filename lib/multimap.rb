@@ -9,7 +9,7 @@ class Multimap < Hash
       return _create([], *args)
     end
 
-    def _create(default = [], *args)
+    def _create(default = [], *args) #:nodoc:
       default.freeze
 
       if args.size == 1 && args.first.is_a?(Hash)
@@ -60,6 +60,17 @@ class Multimap < Hash
     map
   end
 
+  # call-seq:
+  #   map.delete(key, value)  => value
+  #   map.delete(key)         => value
+  #
+  # Deletes and returns a key-value pair from <i>map</i>. If only
+  # <i>key</i> is given, all the values matching that key will be
+  # deleted.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300]]
+  #   map.delete("b", 300) #=> 300
+  #   map.delete("a")      #=> [100]
   def delete(key, value = nil)
     if value
       hash_aref(key).delete(value)
@@ -115,6 +126,16 @@ class Multimap < Hash
     super
   end
 
+  # call-seq:
+  #   map.has_value?(value)    => true or false
+  #   map.value?(value)        => true or false
+  #
+  # Returns <tt>true</tt> if the given value is present for any key
+  # in <i>map</i>.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300]]
+  #   map.has_value?(300)   #=> true
+  #   map.has_value?(999)   #=> false
   def has_value?(value)
     values.include?(value)
   end
@@ -144,12 +165,30 @@ class Multimap < Hash
   alias_method :hash_keys, :keys
   protected :hash_keys
 
+  # call-seq:
+  #   map.keys    => multiset
+  #
+  # Returns a new +Multiset+ populated with the keys from this hash. See also
+  # <tt>Multimap#values</tt>.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300], "c" => 400]
+  #   map.keys   #=> Multiset.new(["a", "b", "b", "c"])
   def keys
     keys = Multiset.new
     each_key { |key| keys << key }
     keys
   end
 
+  # call-seq:
+  #   map.length    =>  fixnum
+  #   map.size      =>  fixnum
+  #
+  # Returns the number of key-value pairs in the map.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300], "c" => 400]
+  #   map.length        #=> 4
+  #   map.delete("a")   #=> 100
+  #   map.length        #=> 3
   def size
     values.size
   end
@@ -187,6 +226,14 @@ class Multimap < Hash
     }
   end
 
+  # call-seq:
+  #   map.to_a => array
+  #
+  # Converts <i>map</i> to a nested array of [<i>key,
+  # value</i>] arrays.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300], "c" => 400]
+  #   map.to_a   #=> [["a", 100], ["b", 200], ["b", 300], ["c", 400]]
   def to_a
     ary = []
     each_pair do |key, value|
@@ -195,6 +242,13 @@ class Multimap < Hash
     ary
   end
 
+  # call-seq:
+  #   map.to_hash => hash
+  #
+  # Converts <i>map</i> to a basic hash.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300]]
+  #   map.to_hash   #=> { "a" => [100], "b" => [200, 300] }
   def to_hash
     dup
   end
@@ -205,6 +259,14 @@ class Multimap < Hash
     lists
   end
 
+  # call-seq:
+  #   map.values    => array
+  #
+  # Returns a new array populated with the values from <i>map</i>. See
+  # also <tt>Multimap#keys</tt>.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300]]
+  #   map.values   #=> [100, 200, 300]
   def values
     values = []
     each_value { |value| values << value }
@@ -212,7 +274,7 @@ class Multimap < Hash
   end
 
   protected
-    def update_container(key)
+    def update_container(key) #:nodoc:
       container = hash_aref(key)
       container = container.dup if container.equal?(default)
       container = yield(container)

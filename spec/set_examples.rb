@@ -261,7 +261,7 @@ shared_examples_for Set do
 
   it "should return a new set containing elements exclusive between the set and the given enumerable object" do
     set = Multiset[1, 2, 3, 4]
-    ret = set ^ [2, 4, 5, 5]
+    ret = set ^ [2, 4, 5]
     set.should_not equal(ret)
     ret.should == Multiset[1, 3, 5]
   end

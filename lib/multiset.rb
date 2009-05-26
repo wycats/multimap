@@ -121,11 +121,11 @@ class Multiset < Set
   # Returns a new set containing elements common to the set and the
   # given enumerable object.
   def &(enum)
-    a = dup
+    s = dup
     n = self.class.new
     enum.each { |o|
-      if a.include?(o)
-        a.delete(o, 1)
+      if s.include?(o)
+        s.delete(o, 1)
         n.add(o)
       end
     }
@@ -133,13 +133,14 @@ class Multiset < Set
   end
   alias intersection &
 
-  #--
-  # def ^(enum)
-  #   n = Set.new(enum)
-  #   each { |o| if n.include?(o) then n.delete(o) else n.add(o) end }
-  #   n
-  # end
-  #++
+  # Returns a new set containing elements exclusive between the set
+  # and the given enumerable object.  (set ^ enum) is equivalent to
+  # ((set | enum) - (set & enum)).
+  def ^(enum)
+    n = self.class.new(enum)
+    each { |o| n.include?(o) ? n.delete(o, 1) : n.add(o) }
+    n
+  end
 
   # Returns true if two sets are equal. Two multisets are equal if
   # they have the same cardinalities and each element has the same

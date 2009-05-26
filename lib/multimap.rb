@@ -10,8 +10,6 @@ class Multimap < Hash
     end
 
     def _create(default = [], *args) #:nodoc:
-      default.freeze
-
       if args.size == 1 && args.first.is_a?(Hash)
         args[0] = args.first.inject({}) { |hash, (key, value)|
           unless value.is_a?(default.class)
@@ -39,7 +37,7 @@ class Multimap < Hash
   end
 
   def initialize(default = [])
-    super(default.freeze)
+    super
   end
 
   def initialize_copy(original)
@@ -114,6 +112,7 @@ class Multimap < Hash
 
   def freeze
     each_pair_list { |_, container| container.freeze }
+    default.freeze
     super
   end
 

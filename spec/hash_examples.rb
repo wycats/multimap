@@ -33,11 +33,6 @@ shared_examples_for Hash, Multimap, "with inital values {'a' => [100], 'b' => [2
     @map.should be_empty
   end
 
-  it "should return immutable default value" do
-    @map.default.should == @container.new
-    @map.default.should be_frozen
-  end
-
   it "should be the class of the container" do
     @map.default.class.should == @container
   end

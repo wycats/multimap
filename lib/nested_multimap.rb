@@ -22,7 +22,7 @@ class NestedMultimap < Multimap
 
   def <<(value)
     hash_each_pair { |_, container| container << value }
-    append_to_default_container!(value)
+    self.default << value
     nil
   end
 
@@ -50,13 +50,6 @@ class NestedMultimap < Multimap
   def inspect
     super.gsub(/\}$/, ", nil => #{default.inspect}}")
   end
-
-  private
-    def append_to_default_container!(value)
-      self.default = self.default.dup
-      self.default << value
-      self.default.freeze
-    end
 end
 
 begin

@@ -14,7 +14,7 @@ class FuzzyNestedMultimap < NestedMultimap
     when Regexp
       if keys.empty?
         hash_each_pair { |k, l| l << value if key =~ k }
-        append_to_default_container!(value)
+        self.default << value
       else
         hash_keys.each { |k|
           if key =~ k

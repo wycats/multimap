@@ -107,14 +107,6 @@ class Multimap < Hash
   alias_method :hash_each_value, :each_value
   protected :hash_each_value
 
-  def each_list
-    hash_each_value do |value|
-      yield value
-    end
-    yield default
-    self
-  end
-
   def each_value
     each_pair do |key, value|
       yield value
@@ -255,7 +247,7 @@ class Multimap < Hash
 
   def lists
     lists = []
-    each_list { |container| lists << container }
+    each_pair_list { |key, container| lists << container }
     lists
   end
 

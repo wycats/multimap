@@ -99,12 +99,6 @@ shared_examples_for Hash, Multimap, "with inital values {'a' => [100], 'b' => [2
     h.should == { "a" => [100], "b" => [200, 300] }
   end
 
-  it "should iterate over each container" do
-    a = []
-    @map.each_list { |container| a << container }
-    a.should == [@container.new([100]), @container.new([200, 300]), @container.new]
-  end
-
   it "should iterate over each value" do
     a = []
     @map.each_value { |value| a << value }
@@ -211,7 +205,7 @@ shared_examples_for Hash, Multimap, "with inital values {'a' => [100], 'b' => [2
   end
 
   it "should return all containers" do
-    @map.lists.should == [@container.new([100]), @container.new([200, 300]), @container.new]
+    @map.lists.should == [@container.new([100]), @container.new([200, 300])]
   end
 
   it "should return all values" do

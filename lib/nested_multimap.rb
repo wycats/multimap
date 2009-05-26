@@ -43,18 +43,6 @@ class NestedMultimap < Multimap
     end
   end
 
-  def each_list
-    super do |container|
-      if container.respond_to?(:each_list)
-        container.each_list do |value|
-          yield value
-        end
-      else
-        yield container
-      end
-    end
-  end
-
   def inspect
     super.gsub(/\}$/, ", nil => #{default.inspect}}")
   end

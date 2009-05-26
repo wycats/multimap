@@ -22,6 +22,21 @@ task :release => [ :package ] do
   sh "rubyforge add_release #{group_id} #{package_id} #{release_name} #{userfile}"
 end
 
+begin
+  require 'hanna/rdoctask'
+rescue LoadError
+  require 'rake/rdoctask'
+end
+
+Rake::RDocTask.new { |rdoc|
+  rdoc.title    = 'Multimap'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.options << '--charset' << 'utf-8'
+
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+}
+
 task :default => :spec
 
 require 'spec/rake/spectask'

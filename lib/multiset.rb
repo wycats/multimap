@@ -11,25 +11,13 @@ class Multiset < Set
     @hash[e]
   end
 
-  # Returns the total number of elements in a multiset, including repeated memberships
+  # Returns the total number of elements in a multiset, including
+  # repeated memberships
   def cardinality
     @hash.inject(0) { |s, (e, m)| s += m }
   end
   alias_method :size, :cardinality
   alias_method :length, :cardinality
-
-  #--
-  # def replace(enum)
-  #   if enum.class == self.class
-  #     @hash.replace(enum.hash)
-  #   else
-  #     clear
-  #     enum.each { |o| add(o) }
-  #   end
-  # 
-  #   self
-  # end
-  #++
 
   # Converts the set to an array. The order of elements is uncertain.
   def to_a

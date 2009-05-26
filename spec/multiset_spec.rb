@@ -26,6 +26,20 @@ describe Multiset do
     s2 = Multiset.new([:a])
     s1.should_not eql(s2)
   end
+
+  it "should replace the contents of the set" do
+    set = Multiset[:a, :b, :b, :c]
+    ret = set.replace(Multiset[:a, :a, :b, :b, :b, :c])
+
+    set.should equal(ret)
+    set.should == Multiset[:a, :a, :b, :b, :b, :c]
+
+    set = Multiset[:a, :b, :b, :c]
+    ret = set.replace([:a, :a, :b, :b, :b, :c])
+
+    set.should equal(ret)
+    set.should == Multiset[:a, :a, :b, :b, :b, :c]
+  end
 end
 
 describe Multiset, "with inital values" do

@@ -42,6 +42,12 @@ class Multimap < Hash
     super(default.freeze)
   end
 
+  def initialize_copy(original)
+    super
+    clear
+    original.each_pair { |key, container| self[key] = container }
+  end
+
   alias_method :hash_aref, :[]
   protected :hash_aref
 
@@ -55,12 +61,6 @@ class Multimap < Hash
     end
   end
   alias_method :[]=, :store
-
-  def dup
-    map = super.clear
-    each_pair { |key, value| map[key] = value }
-    map
-  end
 
   # call-seq:
   #   map.delete(key, value)  => value

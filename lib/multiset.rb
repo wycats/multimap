@@ -80,14 +80,20 @@ class Multiset < Set
 
   undef :add?
 
-  #--
-  # # Deletes the given object from the set and returns self. Use +subtract+ to
-  # # delete many items at once.
-  # def delete(o)
-  #   @hash.delete(o)
-  #   self
-  # end
-  #++
+  # Deletes all the identical object from the set and returns self.
+  # If +n+ is given, it will remove that amount of identical objects
+  # from the set. Use +subtract+ to delete many different items at
+  # once.
+  def delete(o, n = nil)
+    if n
+      @hash[o] ||= 0
+      @hash[o] -= n
+      @hash.delete(o) if @hash[o] == 0
+    else
+      @hash.delete(o)
+    end
+    self
+  end
 
   undef :delete?
 

@@ -87,6 +87,26 @@ describe Multiset do
     set.proper_subset?(Multiset[1, 2, 3]).should be_false
     set.proper_subset?(Multiset[]).should be_false
   end
+
+  it "should delete the objects from the set and return self" do
+    set = Multiset[1, 2, 2, 3]
+
+    ret = set.delete(4)
+    set.should equal(ret)
+    set.should == Multiset[1, 2, 2, 3]
+
+    ret = set.delete(2)
+    set.should == ret
+    set.should == Multiset[1, 3]
+  end
+
+  it "should delete the number objects from the set and return self" do
+    set = Multiset[1, 2, 2, 3]
+
+    ret = set.delete(2, 1)
+    set.should == ret
+    set.should == Multiset[1, 2, 3]
+  end
 end
 
 describe Multiset, "with inital values" do

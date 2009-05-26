@@ -97,13 +97,12 @@ class Multiset < Set
 
   undef :delete?
 
-  #--
-  # def delete_if
-  #   block_given? or return enum_for(__method__)
-  #   to_a.each { |o| @hash.delete(o) if yield(o) }
-  #   self
-  # end
-  #++
+  # Deletes every element of the set for which block evaluates to
+  # true, and returns self.
+  def delete_if
+    each { |o| delete(o) if yield(o) }
+    self
+  end
 
   #--
   # def merge(enum)

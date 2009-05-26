@@ -22,11 +22,7 @@ task :release => [ :package ] do
   sh "rubyforge add_release #{group_id} #{package_id} #{release_name} #{userfile}"
 end
 
-begin
-  require 'hanna/rdoctask'
-rescue LoadError
-  require 'rake/rdoctask'
-end
+require 'rake/rdoctask'
 
 Rake::RDocTask.new { |rdoc|
   rdoc.title    = 'Multimap'

@@ -35,7 +35,7 @@ class Multimap < Hash
       map.default = default
       map
     end
-    protected :_create
+    private :_create
   end
 
   def initialize(default = [])
@@ -43,8 +43,10 @@ class Multimap < Hash
   end
 
   alias_method :hash_aref, :[]
+  protected :hash_aref
+
   alias_method :hash_aset, :[]=
-  protected :hash_aref, :hash_aset
+  private :hash_aset
 
   def store(key, value)
     update_container(key) do |container|
@@ -92,7 +94,7 @@ class Multimap < Hash
   end
 
   alias_method :hash_each_pair, :each_pair
-  protected :hash_each_pair
+  private :hash_each_pair
 
   alias_method :each_pair_list, :each_pair
 
@@ -104,9 +106,6 @@ class Multimap < Hash
     end
   end
 
-  alias_method :hash_each_value, :each_value
-  protected :hash_each_value
-
   def each_value
     each_pair do |key, value|
       yield value
@@ -114,7 +113,7 @@ class Multimap < Hash
   end
 
   def freeze
-    each_pair_list { |key, container| container.freeze }
+    each_pair_list { |_, container| container.freeze }
     super
   end
 
@@ -155,7 +154,7 @@ class Multimap < Hash
   end
 
   alias_method :hash_keys, :keys
-  protected :hash_keys
+  private :hash_keys
 
   # call-seq:
   #   map.keys    => multiset

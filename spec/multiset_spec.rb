@@ -126,6 +126,20 @@ describe Multiset do
     set.should equal(ret)
     set.should == Multiset[1, 2, 3]
   end
+
+  it "should return a new set containing elements common to the set and the given enumerable object" do
+    set = Multiset[1, 2, 2, 3, 4]
+
+    ret = set & [2, 2, 4, 5]
+    set.should_not equal(ret)
+    ret.should == Multiset[2, 2, 4]
+
+    set = Multiset[1, 2, 3]
+
+    ret = set & [1, 2, 2, 2]
+    set.should_not equal(ret)
+    ret.should == Multiset[1, 2]
+  end
 end
 
 describe Multiset, "with inital values" do

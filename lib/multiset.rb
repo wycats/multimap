@@ -118,29 +118,20 @@ class Multiset < Set
     self
   end
 
-  #--
-  # def |(enum)
-  #   dup.merge(enum)
-  # end
-  # alias + |
-  # alias union |
-  #++
-
-  #--
-  # def -(enum)
-  #   dup.subtract(enum)
-  # end
-  # alias difference
-  #++
-
-  #--
-  # def &(enum)
-  #   n = self.class.new
-  #   enum.each { |o| n.add(o) if include?(o) }
-  #   n
-  # end
-  # alias intersection &
-  #++
+  # Returns a new set containing elements common to the set and the
+  # given enumerable object.
+  def &(enum)
+    a = dup
+    n = self.class.new
+    enum.each { |o|
+      if a.include?(o)
+        a.delete(o, 1)
+        n.add(o)
+      end
+    }
+    n
+  end
+  alias intersection &
 
   #--
   # def ^(enum)

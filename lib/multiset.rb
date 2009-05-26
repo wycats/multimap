@@ -6,6 +6,11 @@ class Multiset < Set
   attr_reader :hash
   protected :hash
 
+  def initialize(*args, &block) #:nodoc:
+    @hash = Hash.new(0)
+    super
+  end
+
   # Returns the number of times an element belongs to the multiset.
   def multiplicity(e)
     @hash[e]
@@ -24,37 +29,33 @@ class Multiset < Set
     inject([]) { |ary, (key, _)| ary << key }
   end
 
-  #--
-  # def superset?(set)
-  #   set.is_a?(Set) or raise ArgumentError, "value must be a set"
-  #   return false if size < set.size
-  #   set.all? { |o| include?(o) }
-  # end
-  #++
+  # Returns true if the set is a superset of the given set.
+  def superset?(set)
+    set.is_a?(self.class) or raise ArgumentError, "value must be a set"
+    return false if cardinality < set.cardinality
+    set.all? { |o| set.multiplicity(o) <= multiplicity(o) }
+  end
 
-  #--
-  # def proper_superset?(set)
-  #   set.is_a?(Set) or raise ArgumentError, "value must be a set"
-  #   return false if size <= set.size
-  #   set.all? { |o| include?(o) }
-  # end
-  #++
+  # Returns true if the set is a proper superset of the given set.
+  def proper_superset?(set)
+    set.is_a?(self.class) or raise ArgumentError, "value must be a set"
+    return false if cardinality <= set.cardinality
+    set.all? { |o| set.multiplicity(o) <= multiplicity(o) }
+  end
 
-  #--
-  # def subset?(set)
-  #   set.is_a?(Set) or raise ArgumentError, "value must be a set"
-  #   return false if set.size < size
-  #   all? { |o| set.include?(o) }
-  # end
-  #++
+  # Returns true if the set is a subset of the given set.
+  def subset?(set)
+    set.is_a?(self.class) or raise ArgumentError, "value must be a set"
+    return false if set.cardinality < cardinality
+    all? { |o| multiplicity(o) <= set.multiplicity(o) }
+  end
 
-  #--
-  # def proper_subset?(set)
-  #   set.is_a?(Set) or raise ArgumentError, "value must be a set"
-  #   return false if set.size <= size
-  #   all? { |o| set.include?(o) }
-  # end
-  #++
+  # Returns true if the set is a proper subset of the given set.
+  def proper_subset?(set)
+    set.is_a?(self.class) or raise ArgumentError, "value must be a set"
+    return false if set.cardinality <= cardinality
+    all? { |o| multiplicity(o) <= set.multiplicity(o) }
+  end
 
   # Calls the given block once for each element in the set, passing
   # the element as parameter. Returns an enumerator if no block is

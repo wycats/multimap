@@ -40,6 +40,53 @@ describe Multiset do
     set.should equal(ret)
     set.should == Multiset[:a, :a, :b, :b, :b, :c]
   end
+
+  it "should return true if the set is a superset of the given set" do
+    set = Multiset[1, 2, 2, 3]
+
+    set.superset?(Multiset[]).should be_true
+    set.superset?(Multiset[1, 2]).should be_true
+    set.superset?(Multiset[1, 2, 3]).should be_true
+    set.superset?(Multiset[1, 2, 2, 3]).should be_true
+    set.superset?(Multiset[1, 2, 2, 2]).should be_false
+    set.superset?(Multiset[1, 2, 3, 4]).should be_false
+    set.superset?(Multiset[1, 4]).should be_false
+  end
+
+  it "should return true if the set is a proper superset of the given set" do
+    set = Multiset[1, 2, 2, 3, 3]
+
+    set.proper_superset?(Multiset[]).should be_true
+    set.proper_superset?(Multiset[1, 2]).should be_true
+    set.proper_superset?(Multiset[1, 2, 3]).should be_true
+    set.proper_superset?(Multiset[1, 2, 2, 3, 3]).should be_false
+    set.proper_superset?(Multiset[1, 2, 2, 2]).should be_false
+    set.proper_superset?(Multiset[1, 2, 3, 4]).should be_false
+    set.proper_superset?(Multiset[1, 4]).should be_false
+  end
+
+  it "should return true if the set is a subset of the given set" do
+    set = Multiset[1, 2, 2, 3]
+
+    set.subset?(Multiset[1, 2, 2, 3, 4]).should be_true
+    set.subset?(Multiset[1, 2, 2, 3, 3]).should be_true
+    set.subset?(Multiset[1, 2, 2, 3]).should be_true
+    set.subset?(Multiset[1, 2, 3]).should be_false
+    set.subset?(Multiset[1, 2, 2]).should be_false
+    set.subset?(Multiset[1, 2, 3]).should be_false
+    set.subset?(Multiset[]).should be_false
+  end
+
+  it "should return true if the set is a proper subset of the given set" do
+    set = Multiset[1, 2, 2, 3, 3]
+
+    set.proper_subset?(Multiset[1, 2, 2, 3, 3, 4]).should be_true
+    set.proper_subset?(Multiset[1, 2, 2, 3, 3]).should be_false
+    set.proper_subset?(Multiset[1, 2, 3]).should be_false
+    set.proper_subset?(Multiset[1, 2, 2]).should be_false
+    set.proper_subset?(Multiset[1, 2, 3]).should be_false
+    set.proper_subset?(Multiset[]).should be_false
+  end
 end
 
 describe Multiset, "with inital values" do

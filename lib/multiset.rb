@@ -3,9 +3,6 @@ require 'set'
 # Multiset implements a collection of unordered values and
 # allows duplicate values.
 class Multiset < Set
-  attr_reader :hash
-  protected :hash
-
   def initialize(*args, &block) #:nodoc:
     @hash = Hash.new(0)
     super

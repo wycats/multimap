@@ -1,41 +1,57 @@
 require 'multiset'
 
 class Multimap < Hash
-  class << self
-    alias_method :hash_s_create, :[]
-    private :hash_s_create
+  # call-seq:
+  #   Multimap[ [key =>|, value]* ]   => multimap
+  #
+  # Creates a new multimap populated with the given objects.
+  #
+  #   Multimap["a", 100, "b", 200]       #=> {"a"=>[100], "b"=>[200]}
+  #   Multimap["a" => 100, "b" => 200]   #=> {"a"=>[100], "b"=>[200]}
+  def self.[](*args)
+    default = []
 
-    def [](*args)
-      return _create([], *args)
+    if args.size == 2 && args.last.is_a?(Hash)
+      default = args.shift
+    elsif !args.first.is_a?(Hash) && args.size % 2 == 1
+      default = args.shift
     end
 
-    def _create(default = [], *args) #:nodoc:
-      if args.size == 1 && args.first.is_a?(Hash)
-        args[0] = args.first.inject({}) { |hash, (key, value)|
-          unless value.is_a?(default.class)
-            value = (default.dup << value)
-          end
-          hash[key] = value
-          hash
-        }
-      else
-        index = 0
-        args.map! { |value|
-          unless index % 2 == 0 || value.is_a?(default.class)
-            value = (default.dup << value)
-          end
-          index += 1
-          value
-        }
-      end
-
-      map = hash_s_create(*args)
-      map.default = default
-      map
+    if args.size == 1 && args.first.is_a?(Hash)
+      args[0] = args.first.inject({}) { |hash, (key, value)|
+        unless value.is_a?(default.class)
+          value = (default.dup << value)
+        end
+        hash[key] = value
+        hash
+      }
+    else
+      index = 0
+      args.map! { |value|
+        unless index % 2 == 0 || value.is_a?(default.class)
+          value = (default.dup << value)
+        end
+        index += 1
+        value
+      }
     end
-    private :_create
+
+    map = super
+    map.default = default
+    map
   end
 
+  # call-seq:
+  #   Multimap.new           => multimap
+  #   Multimap.new(default)  => multimap
+  #
+  # Returns a new, empty multimap.
+  #
+  #   map = Multimap.new(Set.new)
+  #   h["a"] = 100
+  #   h["b"] = 200
+  #   h["a"]           #=> [100].to_set
+  #   h["c"]           #=> [].to_set
   def initialize(default = [])
     super
   end
@@ -224,8 +240,10 @@ class Multimap < Hash
   #   #=> Multimap["c" => 300, "d" => 400]
   def replace(other)
     case other
-    when Array, Hash
-      super(self.class.send(:_create, self.default, other))
+    when Array
+      super(self.class[self.default, *other])
+    when Hash
+      super(self.class[self.default, other])
     when self.class
       super
     else

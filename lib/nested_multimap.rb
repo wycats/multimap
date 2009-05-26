@@ -9,11 +9,7 @@ class NestedMultimap < Multimap
     raise ArgumentError, 'wrong number of arguments (1 for 2)' unless value
 
     if keys.length > 0
-      update_container(key) do |container|
-        container = self.class.new(container) if container.is_a?(default.class)
-        container[*keys] = value
-        container
-      end
+      update_nested_container!(key, keys, value)
     else
       super(key, value)
     end
@@ -64,6 +60,14 @@ class NestedMultimap < Multimap
   end
 
   private
+    def update_nested_container!(key, keys, value)
+      update_container(key) do |container|
+        container = self.class.new(container) unless container.is_a?(self.class)
+        container[*keys] = value
+        container
+      end
+    end
+
     def append_to_default_container!(value)
       self.default = self.default.dup
       self.default << value

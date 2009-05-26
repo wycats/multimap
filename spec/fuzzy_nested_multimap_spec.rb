@@ -37,8 +37,6 @@ shared_examples_for "Fuzzy", Multimap do
   end
 
   it "should work with another crazy situation" do
-    pending
-
     @map[nil, "c"] = 400
     @map["b", "c"] = 500
     @map[nil, "c"] = 600
@@ -47,7 +45,7 @@ shared_examples_for "Fuzzy", Multimap do
     @map["a", "c"].should == [100, 400, 600]
     @map["b"].should == [200, 300]
     @map["b", "c"].should == [200, 300, 400, 500, 600]
-    @map["c", "c"].should == [400, 500, 600]
+    @map["c", "c"].should == [400, 600]
   end
 end
 

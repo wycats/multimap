@@ -13,20 +13,14 @@ class FuzzyNestedMultimap < NestedMultimap
     case key
     when Regexp
       if keys.empty?
-        each_pair_list { |k, l| l << value if key =~ k }
+        hash_each_pair { |k, l| l << value if key =~ k }
         append_to_default_container!(value)
       else
-        self.keys.each { |k|
-          if key =~ k
-            update_container(k) do |container|
-              container = self.class.new(container) if container.is_a?(default.class)
-              container[*keys] = value
-              container
-            end
-          end
+        hash_keys.each { |k|
+          update_nested_container!(k, keys, value) if key =~ k
         }
 
-        self.default = self.class.new(default) if default.is_a?(default.class)
+        self.default = self.class.new(default) unless default.is_a?(self.class)
         default[*keys.dup] = value
       end
     when String

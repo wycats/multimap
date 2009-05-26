@@ -87,7 +87,7 @@ class Multiset < Set
   def delete(o, n = nil)
     if n
       @hash[o] ||= 0
-      @hash[o] -= n
+      @hash[o] -= n if @hash[o] > 0
       @hash.delete(o) if @hash[o] == 0
     else
       @hash.delete(o)
@@ -111,12 +111,12 @@ class Multiset < Set
     self
   end
 
-  #--
-  # def subtract(enum)
-  #   enum.each { |o| delete(o) }
-  #   self
-  # end
-  #++
+  # Deletes every element that appears in the given enumerable object
+  # and returns self.
+  def subtract(enum)
+    enum.each { |o| delete(o, 1) }
+    self
+  end
 
   #--
   # def |(enum)
@@ -156,18 +156,9 @@ class Multiset < Set
   # the multiset is defined according to Object#eql?.
   def eql?(set)
     return true if equal?(set)
-
     set = self.class.new(set) unless set.is_a?(self.class)
-
     return false unless cardinality == set.cardinality
-
-    @hash.each_pair do |element, multiplicity|
-      unless multiplicity == set.multiplicity(element)
-        return false
-      end
-    end
-
-    true
+    superset?(set) && subset?(set)
   end
   alias_method :==, :eql?
 end

@@ -119,6 +119,13 @@ describe Multiset do
     set.should equal(ret)
     set.should == Multiset[1, 2, 2, 3, 4, 5]
   end
+
+  it "should delete every element that appears in the given enumerable object and return self" do
+    set = Multiset[1, 2, 2, 3]
+    ret = set.subtract([2, 4, 6])
+    set.should equal(ret)
+    set.should == Multiset[1, 2, 3]
+  end
 end
 
 describe Multiset, "with inital values" do

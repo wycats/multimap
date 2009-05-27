@@ -1,5 +1,4 @@
 describe "Multimap project" do
-  it "should have all FuzzyNestedMultimap methods documented"
   it "should have a published RDoc page"
 
   it "should have 100% test coverage"

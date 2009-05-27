@@ -33,6 +33,14 @@ Rake::RDocTask.new { |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 }
 
+namespace :rdoc do
+  task :publish => :rdoc do
+    Dir.chdir(File.dirname(__FILE__)) do
+      system "scp -r html/* joshpeek@rubyforge.org:/var/www/gforge-projects/multimap/"
+    end
+  end
+end
+
 task :default => :spec
 
 require 'spec/rake/spectask'

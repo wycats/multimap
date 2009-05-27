@@ -1,6 +1,4 @@
 describe "Multimap project" do
-  it "should have a published RDoc page"
-
   it "should have 100% test coverage"
 
   it "should be really fucking fast"

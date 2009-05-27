@@ -1,5 +1,4 @@
 describe "Multimap project" do
-  it "should have all NestedMultimap methods documented"
   it "should have all FuzzyNestedMultimap methods documented"
   it "should have a published RDoc page"
 

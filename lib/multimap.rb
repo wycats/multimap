@@ -145,7 +145,7 @@ class Multimap < Hash
   # the key and container to the block as parameters.
   #
   #   map = Multimap["a" => 100, "b" => [200, 300]]
-  #   map.each_association { |key, container| puts "#{key} is #{value}" }
+  #   map.each_association { |key, container| puts "#{key} is #{container}" }
   #
   # <em>produces:</em>
   #

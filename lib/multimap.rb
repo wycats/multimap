@@ -144,10 +144,9 @@ class Multimap < Hash
   #   a is [100]
   #   b is [200, 300]
   def each_association
-    hash_each_pair do |key, value|
-      yield key, value
-    end
+    # each_pair
   end
+  alias_method :each_association, :each_pair
 
   # call-seq:
   #   map.each_container { |container| block } => map

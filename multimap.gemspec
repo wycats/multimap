@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email    = 'josh@joshpeek.com'
   s.homepage = 'http://github.com/josh/multimap'
   s.rubyforge_project = 'multimap'
-  s.has_rdoc = false
+  s.has_rdoc = true
   s.authors  = ["Joshua Peek", "Joshua Hull"]
   s.files    = [
     "lib/fuzzy_nested_multimap.rb",

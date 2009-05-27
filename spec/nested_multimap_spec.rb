@@ -105,6 +105,19 @@ describe NestedMultimap, "with nested values" do
     ]
   end
 
+  it "should iterate over each container plus the default" do
+    a = []
+    @map.each_container_with_default { |container| a << container }
+    a.should == [
+      [100],
+      [200, 300],
+      [200],
+      [400, 500],
+      [500],
+      []
+    ]
+  end
+
   it "should iterate over each key" do
     a = []
     @map.each_key { |key| a << key }
@@ -131,12 +144,20 @@ describe NestedMultimap, "with nested values" do
     @map.containers.should == [[100], [200, 300], [400, 500]]
   end
 
+  it "should list all containers plus the default" do
+    @map.containers_with_default.should == [[100], [200, 300], [200], [400, 500], [500], []]
+  end
+
   it "should return array of keys" do
     @map.keys.should == ["a", ["b", "c"], ["b", "c"], ["c", "e"], ["c", "e"]]
   end
 
   it "should list all values" do
     @map.values.should == [100, 200, 300, 400, 500]
+  end
+
+  it "should return the distance to the deepest nesting level" do
+    @map.height.should == 2
   end
 end
 

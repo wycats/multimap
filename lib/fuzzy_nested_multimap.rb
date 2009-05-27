@@ -16,7 +16,7 @@ class FuzzyNestedMultimap < NestedMultimap
         hash_each_pair { |k, l| l << value if key =~ k }
         self.default << value
       else
-        hash_keys.each { |k|
+        hash_each_pair { |k, _|
           if key =~ k
             args[0] = k
             super(*args)

@@ -68,6 +68,9 @@ class Multimap < Hash
   alias_method :hash_aset, :[]=
   private :hash_aset
 
+  alias_method :hash_each_pair, :each_pair
+  private :hash_each_pair
+
   # call-seq:
   #   map[key] = value        => value
   #   map.store(key, value)   => value
@@ -106,9 +109,6 @@ class Multimap < Hash
       super(key)
     end
   end
-
-  alias_method :hash_each_pair, :each_pair
-  private :hash_each_pair
 
   # call-seq:
   #   map.each { |key, value| block } => map
@@ -300,9 +300,6 @@ class Multimap < Hash
     each_pair { |key, value| h[value] = key }
     h
   end
-
-  alias_method :hash_keys, :keys
-  private :hash_keys
 
   # call-seq:
   #   map.keys    => multiset

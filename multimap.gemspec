@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name     = 'multimap'
-  s.version  = '0.0.1'
-  s.date     = '2009-05-20'
+  s.version  = '0.9.0'
+  s.date     = '2009-05-26'
   s.summary  = 'Ruby implementation of multimap'
   s.description = <<-EOS
     Multimap includes a standard Ruby multimap implementation as well

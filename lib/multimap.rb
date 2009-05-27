@@ -1,6 +1,23 @@
 require 'multiset'
 
+# Multimap is a generalization of a map or associative array
+# abstract data type in which more than one value may be associated
+# with and returned for a given key.
 class Multimap < Hash
+  #--
+  # Ignore protected aliases back to the original Hash methods
+  #++
+  module_eval %{
+    alias_method :hash_aref, :[]
+    protected :hash_aref
+
+    alias_method :hash_aset, :[]=
+    protected :hash_aset
+
+    alias_method :hash_each_pair, :each_pair
+    protected :hash_each_pair
+  }
+
   # call-seq:
   #   Multimap[ [key =>|, value]* ]   => multimap
   #
@@ -61,15 +78,6 @@ class Multimap < Hash
     clear
     original.each_pair { |key, container| self[key] = container }
   end
-
-  alias_method :hash_aref, :[]
-  protected :hash_aref
-
-  alias_method :hash_aset, :[]=
-  private :hash_aset
-
-  alias_method :hash_each_pair, :each_pair
-  private :hash_each_pair
 
   # call-seq:
   #   map[key] = value        => value
@@ -146,7 +154,11 @@ class Multimap < Hash
   def each_association
     # each_pair
   end
-  alias_method :each_association, :each_pair
+  #--
+  # Ignore alias_method since the definition above serves
+  # as its documentation.
+  #++
+  module_eval "alias_method :each_association, :each_pair"
 
   # call-seq:
   #   map.each_container { |container| block } => map

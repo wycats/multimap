@@ -35,10 +35,10 @@ class NestedMultimap < Multimap
     r
   end
 
-  def each_pair_list
+  def each_association
     super do |key, container|
-      if container.respond_to?(:each_pair_list)
-        container.each_pair_list do |nested_key, value|
+      if container.respond_to?(:each_association)
+        container.each_association do |nested_key, value|
           yield [key, nested_key].flatten, value
         end
       else

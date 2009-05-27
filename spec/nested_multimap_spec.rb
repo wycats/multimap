@@ -45,7 +45,7 @@ describe NestedMultimap, "with inital values" do
   end
 
   it "should list all containers" do
-    @map.lists.should == [[100], [200, 300]]
+    @map.containers.should == [[100], [200, 300]]
   end
 
   it "should list all values" do
@@ -97,7 +97,7 @@ describe NestedMultimap, "with nested values" do
 
   it "should iterate over each key/container" do
     a = []
-    @map.each_pair_list { |key, container| a << [key, container] }
+    @map.each_association { |key, container| a << [key, container] }
     a.should == [
       ["a", [100]],
       [["b", "c"], [200, 300]],
@@ -108,7 +108,7 @@ describe NestedMultimap, "with nested values" do
   it "should iterate over each key" do
     a = []
     @map.each_key { |key| a << key }
-    a.should == ["a", ["b", "c"], ["c", "e"]]
+    a.should == ["a", ["b", "c"], ["b", "c"], ["c", "e"], ["c", "e"]]
   end
 
   it "should iterate over each key/value pair and yield the pair" do
@@ -128,11 +128,11 @@ describe NestedMultimap, "with nested values" do
   end
 
   it "should list all containers" do
-    @map.lists.should == [[100], [200, 300], [400, 500]]
+    @map.containers.should == [[100], [200, 300], [400, 500]]
   end
 
   it "should return array of keys" do
-    @map.keys.should == ["a", ["b", "c"], ["c", "e"]]
+    @map.keys.should == ["a", ["b", "c"], ["b", "c"], ["c", "e"], ["c", "e"]]
   end
 
   it "should list all values" do

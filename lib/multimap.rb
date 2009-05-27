@@ -107,6 +107,9 @@ class Multimap < Hash
     end
   end
 
+  alias_method :hash_each_pair, :each_pair
+  private :hash_each_pair
+
   # call-seq:
   #   map.each { |key, value| block } => map
   #
@@ -114,7 +117,7 @@ class Multimap < Hash
   # the key and value to the block as a two-element array.
   #
   #   map = Multimap["a" => 100, "b" => [200, 300]]
-  #   map.each {|key, value| puts "#{key} is #{value}" }
+  #   map.each { |key, value| puts "#{key} is #{value}" }
   #
   # <em>produces:</em>
   #
@@ -124,6 +127,44 @@ class Multimap < Hash
   def each
     each_pair do |key, value|
       yield [key, value]
+    end
+  end
+
+  # call-seq:
+  #   map.each_association { |key, container| block } => map
+  #
+  # Calls <i>block</i> once for each key/container in <i>map</i>, passing
+  # the key and container to the block as parameters.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300]]
+  #   map.each_association { |key, container| puts "#{key} is #{value}" }
+  #
+  # <em>produces:</em>
+  #
+  #   a is [100]
+  #   b is [200, 300]
+  def each_association
+    hash_each_pair do |key, value|
+      yield key, value
+    end
+  end
+
+  # call-seq:
+  #   map.each_container { |container| block } => map
+  #
+  # Calls <i>block</i> for each container in <i>map</i>, passing the
+  # container as a parameter.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300]]
+  #   map.each_container { |container| puts container }
+  #
+  # <em>produces:</em>
+  #
+  #   [100]
+  #   [200, 300]
+  def each_container
+    each_association do |_, container|
+      yield container
     end
   end
 
@@ -142,15 +183,10 @@ class Multimap < Hash
   #   b
   #   b
   def each_key
-    each_pair_list do |key, values|
+    each_pair do |key, _|
       yield key
     end
   end
-
-  alias_method :hash_each_pair, :each_pair
-  private :hash_each_pair
-
-  alias_method :each_pair_list, :each_pair
 
   # call-seq:
   #   map.each_pair { |key_value_array| block } => map
@@ -167,7 +203,7 @@ class Multimap < Hash
   #   b is 200
   #   b is 300
   def each_pair
-    each_pair_list do |key, values|
+    each_association do |key, values|
       values.each do |value|
         yield key, value
       end
@@ -189,13 +225,13 @@ class Multimap < Hash
   #   200
   #   300
   def each_value
-    each_pair do |key, value|
+    each_pair do |_, value|
       yield value
     end
   end
 
   def freeze #:nodoc:
-    each_pair_list { |_, container| container.freeze }
+    each_container { |container| container.freeze }
     default.freeze
     super
   end
@@ -272,7 +308,7 @@ class Multimap < Hash
   #   map.keys    => multiset
   #
   # Returns a new +Multiset+ populated with the keys from this hash. See also
-  # <tt>Multimap#values</tt>.
+  # <tt>Multimap#values</tt> and <tt>Multimap#containers</tt>.
   #
   #   map = Multimap["a" => 100, "b" => [200, 300], "c" => 400]
   #   map.keys   #=> Multiset.new(["a", "b", "b", "c"])
@@ -386,17 +422,25 @@ class Multimap < Hash
     dup
   end
 
-  def lists
-    lists = []
-    each_pair_list { |key, container| lists << container }
-    lists
+  # call-seq:
+  #   map.containers    => array
+  #
+  # Returns a new array populated with the containers from <i>map</i>. See
+  # also <tt>Multimap#keys</tt> and <tt>Multimap#values</tt>.
+  #
+  #   map = Multimap["a" => 100, "b" => [200, 300]]
+  #   map.containers   #=> [[100], [200, 300]]
+  def containers
+    containers = []
+    each_container { |container| containers << container }
+    containers
   end
 
   # call-seq:
   #   map.values    => array
   #
   # Returns a new array populated with the values from <i>map</i>. See
-  # also <tt>Multimap#keys</tt>.
+  # also <tt>Multimap#keys</tt> and <tt>Multimap#containers</tt>.
   #
   #   map = Multimap["a" => 100, "b" => [200, 300]]
   #   map.values   #=> [100, 200, 300]

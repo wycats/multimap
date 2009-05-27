@@ -368,21 +368,13 @@ class Multimap < Hash
   #   #=> Multimap["a" => 100, "b" => [200, 254], "c" => 300]
   def update(other)
     case other
+    when self.class
+      other.each_pair { |key, value| store(key, value) }
     when Hash
-      other.each_pair do |key, values|
-        update_container(key) do |container|
-          if values.respond_to?(:each)
-            values.each { |value| container << value }
-          else
-            container << values
-          end
-          container
-        end
-      end
+      update(self.class[self.default, other])
     else
       raise ArgumentError
     end
-
     self
   end
   alias_method :merge!, :update

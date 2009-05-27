@@ -179,6 +179,12 @@ shared_examples_for Hash, Multimap, "with inital values {'a' => [100], 'b' => [2
     @map["a"].should == @container.new([100])
     @map["b"].should == @container.new([200, 300, 254])
     @map["c"].should == @container.new([300])
+
+    klass = @map.class
+    @map.update(klass[@container.new, {"a" => @container.new([400, 500]), "c" => 600}])
+    @map["a"].should == @container.new([100, 400, 500])
+    @map["b"].should == @container.new([200, 300, 254])
+    @map["c"].should == @container.new([300, 600])
   end
 
   it "should reject key/value pairs on copy of the map" do

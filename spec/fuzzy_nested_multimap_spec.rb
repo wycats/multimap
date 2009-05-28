@@ -8,44 +8,41 @@ shared_examples_for "Fuzzy", Multimap do
     @map[/^a$/] = 500
     @map["a"].should == [100, 500]
     @map["b"].should == [200, 300]
-    @map[nil].should == [500]
-  end
-
-  it "should convert nil key to a Regexp" do
-    @map[nil] = 500
-    @map["a"].should == [100, 500]
-    @map["b"].should == [200, 300, 500]
-    @map[nil].should == [500]
-  end
-
-  it "should allow keys to be empty" do
-    keys = []
-    @map[*keys] = 500
-    @map["a"].should == [100, 500]
-    @map["b"].should == [200, 300, 500]
-    @map[nil].should == [500]
+    @map[/.+/].should == [500]
   end
 
   it "should allow static keys nested below Regexp" do
-    @map[nil, "c"] = 500
+    @map[/.+/, "c"] = 500
     @map["a"].should == [100]
     @map["a", "c"].should == [100, 500]
     @map["b"].should == [200, 300]
     @map["b", "c"].should == [200, 300, 500]
-    @map[nil].should == []
-    @map[nil, "c"].should == [500]
+    @map[/.+/].should == []
+    @map[/.+/, "c"].should == [500]
   end
 
   it "should work with another crazy situation" do
-    @map[nil, "c"] = 400
+    @map[/.+/, "c"] = 400
     @map["b", "c"] = 500
-    @map[nil, "c"] = 600
+    @map[/.+/, "c"] = 600
 
     @map["a"].should == [100]
     @map["a", "c"].should == [100, 400, 600]
     @map["b"].should == [200, 300]
     @map["b", "c"].should == [200, 300, 400, 500, 600]
     @map["c", "c"].should == [400, 600]
+  end
+
+  it "should support any key that responds to =~" do
+    @map[true] = "TrueClass"
+    @map[false] = "FalseClass"
+    @map[100] = "one hundred"
+    @map[nil] = "null"
+
+    @map[true].should == ["TrueClass"]
+    @map[false].should == ["FalseClass"]
+    @map[100].should == ["one hundred"]
+    @map[nil].should == ["null"]
   end
 end
 

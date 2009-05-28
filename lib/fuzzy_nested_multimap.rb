@@ -43,4 +43,6 @@ class FuzzyNestedMultimap < NestedMultimap
     end
   end
   alias_method :[]=, :store
+
+  undef :index, :invert
 end

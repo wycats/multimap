@@ -307,7 +307,7 @@ class Multimap < Hash
   #   map = Multimap["n" => 100, "m" => 100, "d" => [200, 300]]
   #   map.invert #=> Multimap[100 => ["n", "m"], 200 => "d", 300 => "d"]
   def invert
-    h = Multimap.new(default.dup)
+    h = self.class.new(default.dup)
     each_pair { |key, value| h[value] = key }
     h
   end

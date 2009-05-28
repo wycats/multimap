@@ -33,6 +33,17 @@ shared_examples_for "Fuzzy", Multimap do
     @map["c", "c"].should == [400, 600]
   end
 
+  it "should not copy default values to new containers unless there key matches the new one" do
+    pending
+
+    @map = FuzzyNestedMultimap.new
+    @map[/^b$/] = "b"
+    @map["a"] = "a"
+
+    @map["a"].should == ["a"]
+    @map["b"].should == ["b"]
+  end
+
   it "should support any key that responds to =~" do
     @map[true] = "TrueClass"
     @map[false] = "FalseClass"

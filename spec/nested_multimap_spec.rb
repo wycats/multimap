@@ -26,9 +26,20 @@ describe NestedMultimap, "with inital values" do
     @map["b", "c"].should == [200, 300, 500]
   end
 
+  it "should treat missing keys as append to all" do
+    @map[] = 400
+    @map["a"].should == [100, 400]
+    @map["b"].should == [200, 300, 400]
+    @map["c"].should == [400]
+    @map[nil].should == [400]
+  end
+
   it "should append the value to default containers" do
-    @map << 300
-    @map[nil].should == [300]
+    @map << 400
+    @map["a"].should == [100, 400]
+    @map["b"].should == [200, 300, 400]
+    @map["c"].should == [400]
+    @map[nil].should == [400]
   end
 
   it "should append the value to all containers" do

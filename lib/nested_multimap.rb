@@ -16,20 +16,21 @@ class NestedMultimap < Multimap
   #   map["a"] = 102
   #   map   #=> {"a"=>{"b"=>[100, 101, 102], default => [100, 102]}}
   def store(*args)
-    value = args.pop
-    key   = args.shift
     keys  = args
+    value = args.pop
 
     raise ArgumentError, 'wrong number of arguments (1 for 2)' unless value
 
-    if keys.length > 0
-      update_container(key) do |container|
+    if keys.length > 1
+      update_container(keys.shift) do |container|
         container = self.class.new(container) unless container.is_a?(self.class)
         container[*keys] = value
         container
       end
+    elsif keys.length == 1
+      super(keys.first, value)
     else
-      super(key, value)
+      self << value
     end
   end
   alias_method :[]=, :store

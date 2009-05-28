@@ -79,6 +79,11 @@ class Multimap < Hash
     original.each_pair { |key, container| self[key] = container }
   end
 
+  #--
+  # Setting a default proc is not supported
+  #++
+  undef :default_proc
+
   # call-seq:
   #   map[key] = value        => value
   #   map.store(key, value)   => value

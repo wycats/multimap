@@ -34,14 +34,27 @@ shared_examples_for "Fuzzy", Multimap do
   end
 
   it "should not copy default values to new containers unless there key matches the new one" do
-    pending
-
     @map = FuzzyNestedMultimap.new
     @map[/^b$/] = "b"
     @map["a"] = "a"
+    @map["c"] = "c"
 
     @map["a"].should == ["a"]
     @map["b"].should == ["b"]
+    @map["c"].should == ["c"]
+  end
+
+  it "should not copy default values to nested containers unless there key matches the new one" do
+    @map = FuzzyNestedMultimap.new
+    @map[/^[0-9]$/, "a", "c"] = "#ac"
+    @map["b", "a", "c"] = "bac"
+    @map["c"] = "c"
+
+    @map["b", "a", "c"].should == ["bac"]
+    @map["1", "a", "c"].should == ["#ac"]
+    @map["2", "a", "c"].should == ["#ac"]
+    @map["?", "a", "c"].should == ["#ac"]
+    @map["c"].should == ["c"]
   end
 
   it "should support any key that responds to =~" do

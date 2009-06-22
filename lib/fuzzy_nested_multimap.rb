@@ -3,6 +3,22 @@ require 'nested_multimap'
 # FuzzyNestedMultimap is an extension on top of NestedMultimap
 # that allows fuzzy matching.
 class FuzzyNestedMultimap < NestedMultimap
+  def self.[](*args) #:nodoc:
+    map = super
+    map.instance_variable_set('@fuzz', {})
+    map
+  end
+
+  def initialize(default = []) #:nodoc:
+    @fuzz = {}
+    super
+  end
+
+  def initialize_copy(original) #:nodoc:
+    @fuzz = original.instance_variable_get('@fuzz').dup
+    super
+  end
+
   # call-seq:
   #   multimap[*keys] = value      => value
   #   multimap.store(*keys, value) => value
@@ -23,6 +39,7 @@ class FuzzyNestedMultimap < NestedMultimap
     end
 
     if key.is_a?(Regexp)
+      @fuzz[value] = key
       if keys.empty?
         hash_each_pair { |k, l| l << value if k =~ key }
         self.default << value
@@ -43,5 +60,29 @@ class FuzzyNestedMultimap < NestedMultimap
   end
   alias_method :[]=, :store
 
+  def freeze #:nodoc:
+    @fuzz.clear
+    @fuzz = nil
+    super
+  end
+
   undef :index, :invert
+
+  protected
+    def update_container(key) #:nodoc:
+      super do |container|
+        if container.is_a?(self.class)
+          container.each_container_with_default do |c|
+            c.delete_if do |value|
+              (requirement = @fuzz[value]) && key !~ requirement
+            end
+          end
+        else
+          container.delete_if do |value|
+            (requirement = @fuzz[value]) && key !~ requirement
+          end
+        end
+        yield container
+      end
+    end
 end

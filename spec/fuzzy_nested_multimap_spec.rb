@@ -57,6 +57,37 @@ shared_examples_for "Fuzzy", Multimap do
     @map["c"].should == ["c"]
   end
 
+  it "nested regexps are properly copied" do
+    @map = FuzzyNestedMultimap.new
+    @map[/.+/, /.+/, "z"] = "???z"
+    @map["a"] = "a"
+    @map["b"] = "b"
+
+    @map["a"].should == ["a"]
+    @map["b"].should == ["b"]
+    @map["a", "b", "z"].should == ["???z", "a"]
+    @map["x", "y", "z"].should == ["???z"]
+  end
+
+  it "does not lose deeply nested wild cards" do
+    @map = FuzzyNestedMultimap.new
+    @map["a"] = "a"
+    @map[/.+/, /.+/, /.+/, "z"] = "???z"
+    @map["b", "c"] = "bc"
+    @map["a", /.+/, "b"] = "a?b"
+    @map["a", /.+/, "c"] = "a?c"
+    @map["c", "d"] = "cd"
+
+    @map["a"].should == ["a"]
+    @map["w", "x", "y", "z"].should == ["???z"]
+    @map["b", "c"].should == ["bc"]
+    @map["a", "a", "b"].should == ["a", "a?b"]
+    @map["a", "b", "b"].should == ["a", "a?b"]
+    @map["a", "a", "c"].should == ["a", "a?c"]
+    @map["a", "b", "c"].should == ["a", "a?c"]
+    @map["c", "d"].should == ["cd"]
+  end
+
   it "should support any key that responds to =~" do
     @map[true] = "TrueClass"
     @map[false] = "FalseClass"

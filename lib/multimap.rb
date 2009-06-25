@@ -77,6 +77,7 @@ class Multimap < Hash
     super
     clear
     original.each_pair { |key, container| self[key] = container }
+    self.default = original.default.dup
   end
 
   #--

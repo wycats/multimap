@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/josh/multimap'
   s.rubyforge_project = 'multimap'
   s.has_rdoc = true
-  s.authors  = ["Joshua Peek", "Joshua Hull"]
+  s.authors  = ["Joshua Peek"]
   s.files    = [
     "ext/nested_multimap_ext.c",
     "lib/fuzzy_nested_multimap.rb",

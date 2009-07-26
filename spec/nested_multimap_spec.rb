@@ -166,10 +166,6 @@ describe NestedMultimap, "with nested values" do
   it "should list all values" do
     @map.values.should == [100, 200, 300, 400, 500]
   end
-
-  it "should return the distance to the deepest nesting level" do
-    @map.height.should == 2
-  end
 end
 
 

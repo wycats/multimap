@@ -145,20 +145,6 @@ class NestedMultimap < Multimap
     containers
   end
 
-  # call-seq:
-  #   multimap.height    =>  fixnum
-  #
-  # Returns the deepest level of nesting.
-  #
-  #   map = NestedMultimap["a" => 100, "b" => 200]
-  #   map["a", "b"] = 101
-  #   map.height  #=> 2
-  #   map["a", "b", "c"] = 102
-  #   map.height  #=> 3
-  def height
-    containers_with_default.max { |a, b| a.length <=> b.length }.length
-  end
-
   def inspect #:nodoc:
     super.gsub(/\}$/, ", default => #{default.inspect}}")
   end

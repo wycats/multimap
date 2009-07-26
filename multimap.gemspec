@@ -4,8 +4,7 @@ Gem::Specification.new do |s|
   s.date     = '2009-05-26'
   s.summary  = 'Ruby implementation of multimap'
   s.description = <<-EOS
-    Multimap includes a standard Ruby multimap implementation as well
-    as a nested multimap and a fuzzy nested multimap
+    Multimap includes a Ruby multimap implementation
   EOS
   s.email    = 'josh@joshpeek.com'
   s.homepage = 'http://github.com/josh/multimap'
@@ -14,7 +13,6 @@ Gem::Specification.new do |s|
   s.authors  = ["Joshua Peek"]
   s.files    = [
     "ext/nested_multimap_ext.c",
-    "lib/fuzzy_nested_multimap.rb",
     "lib/multimap.rb",
     "lib/multiset.rb",
     "lib/nested_multimap.rb"

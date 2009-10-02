@@ -1,6 +1,7 @@
 begin
   require 'mg'
-  MG.new('multimap.gemspec')
+  mg = MG.new('multimap.gemspec')
+  $spec = mg.spec
 rescue LoadError
 end
 
@@ -34,7 +35,6 @@ end
 
 
 begin
-  gem 'rake-compiler'
   require 'rake/extensiontask'
 
   Rake::ExtensionTask.new do |ext|
@@ -44,5 +44,5 @@ begin
 
   desc "Run specs using C ext"
   task "spec:ext" => [:compile, :spec, :clobber]
-rescue Gem::LoadError
+rescue LoadError
 end

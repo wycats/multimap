@@ -19,5 +19,4 @@ Gem::Specification.new do |s|
   ]
   s.extensions = ["ext/extconf.rb"]
   s.extra_rdoc_files = %w[README.rdoc MIT-LICENSE]
-  s.require_paths = %w[lib]
 end

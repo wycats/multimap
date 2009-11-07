@@ -30,7 +30,8 @@ task :default => :spec
 require 'spec/rake/spectask'
 
 Spec::Rake::SpecTask.new do |t|
-  t.libs << "lib"
+  t.libs << 'lib'
+  t.ruby_opts = ['-w']
 end
 
 

@@ -4,16 +4,16 @@ shared_examples_for Set do
     Multiset[nil]
     Multiset[1, 2, 3]
 
-    Multiset[].size.should == 0
-    Multiset[nil].size.should == 1
-    Multiset[[]].size.should == 1
-    Multiset[[nil]].size.should == 1
+    Multiset[].size.should eql(0)
+    Multiset[nil].size.should eql(1)
+    Multiset[[]].size.should eql(1)
+    Multiset[[nil]].size.should eql(1)
 
     set = Multiset[2, 4, 6, 4]
-    Multiset.new([2, 4, 6]).should_not == set
+    Multiset.new([2, 4, 6]).should_not eql(set)
 
     set = Multiset[2, 4, 6, 4]
-    Multiset.new([2, 4, 6, 4]).should == set
+    Multiset.new([2, 4, 6, 4]).should eql(set)
   end
 
   it "should create a new set containing the elements of the given enumerable object" do
@@ -27,21 +27,21 @@ shared_examples_for Set do
     lambda { Multiset.new(1) }.should raise_error
     lambda { Multiset.new(1, 2) }.should raise_error
 
-    Multiset.new().size.should == 0
-    Multiset.new(nil).size.should == 0
-    Multiset.new([]).size.should == 0
-    Multiset.new([nil]).size.should == 1
+    Multiset.new().size.should eql(0)
+    Multiset.new(nil).size.should eql(0)
+    Multiset.new([]).size.should eql(0)
+    Multiset.new([nil]).size.should eql(1)
 
     ary = [2, 4, 6, 4]
     set = Multiset.new(ary)
     ary.clear
     set.should_not be_empty
-    set.size.should == 4
+    set.size.should eql(4)
 
     ary = [1, 2, 3]
 
     s = Multiset.new(ary) { |o| o * 2 }
-    [2, 4, 6].should == s.sort
+    [2, 4, 6].should eql(s.sort)
   end
 
   it "should duplicate set" do
@@ -50,7 +50,7 @@ shared_examples_for Set do
 
     set1.should_not equal(set2)
 
-    set1.should == set2
+    set1.should eql(set2)
 
     set1.add(3)
 
@@ -58,9 +58,9 @@ shared_examples_for Set do
   end
 
   it "should return the number of elements" do
-    Multiset[].size.should == 0
-    Multiset[1, 2].size.should == 2
-    Multiset[1, 2, 1].size.should == 3
+    Multiset[].size.should eql(0)
+    Multiset[1, 2].size.should eql(2)
+    Multiset[1, 2, 1].size.should eql(3)
   end
 
   it "should return true if the set contains no elements" do
@@ -81,14 +81,14 @@ shared_examples_for Set do
     ret = set.replace('a'..'c')
 
     set.should equal(ret)
-    set.should == Multiset['a', 'b', 'c']
+    set.should eql(Multiset['a', 'b', 'c'])
   end
 
   it "should convert the set to an array" do
     set = Multiset[1, 2, 3, 2]
     ary = set.to_a
 
-    ary.sort.should == [1, 2, 2, 3]
+    ary.sort.should eql([1, 2, 2, 3])
   end
 
   it "should return true if the set contains the given object" do
@@ -176,11 +176,11 @@ shared_examples_for Set do
 
     ret = set.add(2)
     set.should equal(ret)
-    set.should == Multiset[1, 2, 2, 3]
+    set.should eql(Multiset[1, 2, 2, 3])
 
     ret = set.add(4)
     set.should equal(ret)
-    set.should == Multiset[1, 2, 2, 3, 4]
+    set.should eql(Multiset[1, 2, 2, 3, 4])
   end
 
   it "should delete the given object from the set and return self" do
@@ -188,23 +188,23 @@ shared_examples_for Set do
 
     ret = set.delete(4)
     set.should equal(ret)
-    set.should == Multiset[1, 2, 3]
+    set.should eql(Multiset[1, 2, 3])
 
     ret = set.delete(2)
-    set.should == ret
-    set.should == Multiset[1, 3]
+    set.should eql(ret)
+    set.should eql(Multiset[1, 3])
   end
 
   it "should delete every element of the set for which block evaluates to true, and return self" do
     set = Multiset.new(1..10)
     ret = set.delete_if { |i| i > 10 }
     set.should equal(ret)
-    set.should == Multiset.new(1..10)
+    set.should eql(Multiset.new(1..10))
 
     set = Multiset.new(1..10)
     ret = set.delete_if { |i| i % 3 == 0 }
     set.should equal(ret)
-    set.should == Multiset[1, 2, 4, 5, 7, 8, 10]
+    set.should eql(Multiset[1, 2, 4, 5, 7, 8, 10])
   end
 
   it "should deletes every element of the set for which block evaluates to true but return nil if no changes were made" do
@@ -212,11 +212,11 @@ shared_examples_for Set do
 
     ret = set.reject! { |i| i > 10 }
     ret.should be_nil
-    set.should == Multiset.new(1..10)
+    set.should eql(Multiset.new(1..10))
 
     ret = set.reject! { |i| i % 3 == 0 }
     set.should equal(ret)
-    set.should == Multiset[1, 2, 4, 5, 7, 8, 10]
+    set.should eql(Multiset[1, 2, 4, 5, 7, 8, 10])
   end
 
   it "should merge the elements of the given enumerable object to the set and return self" do
@@ -224,7 +224,7 @@ shared_examples_for Set do
 
     ret = set.merge([2, 4, 6])
     set.should equal(ret)
-    set.should == Multiset[1, 2, 2, 3, 4, 6]
+    set.should eql(Multiset[1, 2, 2, 3, 4, 6])
   end
 
   it "should delete every element that appears in the given enumerable object and return self" do
@@ -232,7 +232,7 @@ shared_examples_for Set do
 
     ret = set.subtract([2, 4, 6])
     set.should equal(ret)
-    set.should == Multiset[1, 3]
+    set.should eql(Multiset[1, 3])
   end
 
   it "should return a new set built by merging the set and the elements of the given enumerable object" do
@@ -240,7 +240,7 @@ shared_examples_for Set do
 
     ret = set + [2, 4, 6]
     set.should_not equal(ret)
-    ret.should == Multiset[1, 2, 2, 3, 4, 6]
+    ret.should eql(Multiset[1, 2, 2, 3, 4, 6])
   end
 
   it "should return a new set built by duplicating the set, removing every element that appears in the given enumerable object" do
@@ -248,7 +248,7 @@ shared_examples_for Set do
 
     ret = set - [2, 4, 6]
     set.should_not equal(ret)
-    ret.should == Multiset[1, 3]
+    ret.should eql(Multiset[1, 3])
   end
 
   it "should return a new set containing elements common to the set and the given enumerable object" do
@@ -256,14 +256,14 @@ shared_examples_for Set do
 
     ret = set & [2, 4, 6]
     set.should_not equal(ret)
-    ret.should == Multiset[2, 4]
+    ret.should eql(Multiset[2, 4])
   end
 
   it "should return a new set containing elements exclusive between the set and the given enumerable object" do
     set = Multiset[1, 2, 3, 4]
     ret = set ^ [2, 4, 5]
     set.should_not equal(ret)
-    ret.should == Multiset[1, 3, 5]
+    ret.should eql(Multiset[1, 3, 5])
   end
 end
 
@@ -288,14 +288,14 @@ shared_examples_for Set, "with inital values [1, 2]" do
   it "should iterate over all the values in the set" do
     a = []
     @set.each { |o| a << o }
-    a.should == [1, 2]
+    a.should eql([1, 2])
   end
 
   it "should convert to an array" do
-    @set.to_a.should == [1, 2]
+    @set.to_a.should eql([1, 2])
   end
 
   it "should convert to a set" do
-    @set.to_set.should == Set.new([1, 2])
+    @set.to_set.to_a.should eql([1, 2])
   end
 end

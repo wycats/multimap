@@ -63,6 +63,10 @@ class MiniArray
   def ==(other)
     other.is_a?(self.class) && @data == other.data
   end
+
+  def eql?(other)
+    other.is_a?(self.class) && @data.eql?(other.data)
+  end
 end
 
 describe Multimap, "with", MiniArray do

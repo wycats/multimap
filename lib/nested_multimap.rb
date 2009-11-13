@@ -149,8 +149,3 @@ class NestedMultimap < Multimap
     super.gsub(/\}$/, ", default => #{default.inspect}}")
   end
 end
-
-begin
-  require 'nested_multimap_ext'
-rescue LoadError
-end

@@ -12,11 +12,9 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.authors  = ["Joshua Peek"]
   s.files    = [
-    "ext/nested_multimap_ext.c",
     "lib/multimap.rb",
     "lib/multiset.rb",
     "lib/nested_multimap.rb"
   ]
-  s.extensions = ["ext/extconf.rb"]
   s.extra_rdoc_files = %w[README.rdoc MIT-LICENSE]
 end
